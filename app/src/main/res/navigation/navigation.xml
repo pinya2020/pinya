@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_dailyreport"
+    app:startDestination="@id/ic_dailyreport">
+
+    <fragment
+        android:id="@+id/ic_dailyreport"
+        android:name="com.juan.pinya.fragments.DailyReportFragment"
+        android:label="fragment_daily_report"
+        tools:layout="@layout/fragment_daily_report" />
+    <fragment
+        android:id="@+id/ic_expenditure"
+        android:name="com.juan.pinya.fragments.ExpenditureFragment"
+        android:label="fragment_expenditure"
+        tools:layout="@layout/fragment_expenditure" />
+    <fragment
+        android:id="@+id/ic_statistics"
+        android:name="com.juan.pinya.fragments.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
+</navigation>

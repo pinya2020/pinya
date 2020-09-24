@@ -14,12 +14,13 @@ class StuffDaoImpl(private val gson: Gson) : StuffDao {
     }
 
     override suspend fun getStuffById(id: String) =
-        suspendCoroutine<Result<Stuff>> { continuation ->
-            firestore.collection(Stuff.DIR_NAME)
+        suspendCoroutine<Result<Stuff?>> { continuation ->
+            firestore
+                .collection(Stuff.DIR_NAME)
                 .document(id)
                 .get()
                 .addOnSuccessListener {
-                    continuation.resume(Result.success(it.parseDocument()))
+                    continuation.resume(Result.success(it?.parseDocument()))
                 }
                 .addOnFailureListener {
                     continuation.resume(Result.failure(it))

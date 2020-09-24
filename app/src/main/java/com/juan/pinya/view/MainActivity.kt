@@ -13,14 +13,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val dailyReportFragment by lazy { DailyReportFragment() }
+    private val expenditureFragment by lazy { ExpenditureFragment() }
+    private val statisticsFragment by lazy { StatisticsFragment() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val dailyReportFragment = DailyReportFragment()
-        val expenditureFragment = ExpenditureFragment()
-        val statisticsFragment = StatisticsFragment()
-
         btnav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.ic_dailyreport -> makeCurrentFragment(dailyReportFragment)
@@ -29,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, dailyReportFragment).commit()
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     companion object {
-        private const val ID_KEY = "id"
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }

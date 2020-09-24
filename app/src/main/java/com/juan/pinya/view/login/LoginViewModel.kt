@@ -3,6 +3,7 @@ package com.juan.pinya.view.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.juan.pinya.model.LoginType
 import com.juan.pinya.model.SingleLiveEvent
 import com.juan.pinya.module.SharedPreferencesManager
 import com.juan.pinya.module.StuffDao
@@ -13,23 +14,36 @@ class LoginViewModel(
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
-    private val mIsLoginSuccess = SingleLiveEvent<Boolean>()
-    val isLoginSuccess: LiveData<Boolean>
+    private val mIsLoginSuccess = SingleLiveEvent<LoginType>()
+    val isLoginSuccess: LiveData<LoginType>
         get() = mIsLoginSuccess
 
     private val mError = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable>
         get() = mError
 
-    fun doLoginAction(id: String, password: String) {
+    fun autoLogin() {
+        if (
+            sharedPreferencesManager.id.isNotEmpty()
+            && sharedPreferencesManager.password.isNotEmpty()
+        ) {
+            doLoginAction(
+                sharedPreferencesManager.id,
+                sharedPreferencesManager.password,
+                LoginType.AutoLogin(false)
+            )
+        }
+    }
+
+    fun doLoginAction(id: String, password: String, loginType: LoginType) {
         viewModelScope.launch {
             stuffDao.getStuffById(id).onSuccess { stuff ->
-                if (stuff != null) {
-                    if (stuff.password == password) {
-                        sharedPreferencesManager.id = stuff.id
-                    }
-                    mIsLoginSuccess.setValue(stuff.password == password)
+                if (stuff?.password == password) {
+                    sharedPreferencesManager.id = stuff.id
+                    sharedPreferencesManager.password = stuff.password
                 }
+                loginType.isLoginSuccess = stuff?.password == password
+                mIsLoginSuccess.setValue(loginType)
             }.onFailure {
                 mError.setValue(it)
             }

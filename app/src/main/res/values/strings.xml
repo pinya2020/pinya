@@ -14,4 +14,5 @@
     <string name="text_enter">確定</string>
     <string name="text_retry">重試</string>
     <string name="text_loading">讀取中...</string>
+    <string name="text_please_enter_id">請輸入帳號</string>
 </resources>

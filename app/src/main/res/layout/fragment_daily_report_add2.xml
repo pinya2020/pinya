@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pinya_yellow2"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".fragments.dailyreport.DailyReportAdd2Fragment">
+
+    <TextView
+        android:id="@+id/add2_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:text="@string/text_please_select_company"
+        android:textSize="20dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_add2"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:paddingTop="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="126dp"
+        android:orientation="horizontal">
+
+       <Button
+           android:id="@+id/add2_up_Button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:text="@string/text_up"/>
+
+        <Button
+            android:id="@+id/add2_next_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_next" />
+    </LinearLayout>
+</LinearLayout>

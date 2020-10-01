@@ -12,6 +12,10 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
         get() = getValue(PASSWORD_KEY, "")
         set(value) = setValue(PASSWORD_KEY, value)
 
+    var name: String
+        get() = getValue(NAME_KEY,"")
+        set(value) = setValue(NAME_KEY,value)
+
     private fun <T> setValue(key: String, value: T) {
         when (value) {
             is String -> {
@@ -41,5 +45,6 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
     companion object {
         private const val ID_KEY = "id"
         private const val PASSWORD_KEY = "password"
+        private const val NAME_KEY = "name"
     }
 }

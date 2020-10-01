@@ -1,6 +1,5 @@
 package com.juan.pinya.model
 
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.annotations.SerializedName
 
 data class Stuff(

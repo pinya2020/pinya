@@ -10,7 +10,6 @@ import com.juan.pinya.extention.showAlertDialog
 import com.juan.pinya.extention.showLoadingDialog
 import com.juan.pinya.extention.showToast
 import com.juan.pinya.model.LoginType
-import com.juan.pinya.view.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -28,10 +27,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        alertDialog = showLoadingDialog()
+//        alertDialog = showLoadingDialog()
         loginViewModel.autoLogin()
     }
-
+//enter登入
     private fun initViews() {
         password_editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

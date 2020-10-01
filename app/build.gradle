@@ -43,15 +43,19 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.mediarouter:mediarouter:1.1.0'
     // test
     testImplementation 'junit:junit:4.12'
+    //fragment
+    implementation "androidx.fragment:fragment:1.2.5"
 
     // android text
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //firestore
-    implementation 'com.google.firebase:firebase-firestore:21.6.0'
+    implementation 'com.google.firebase:firebase-firestore:21.7.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
 
     // koin
     def koin_version = "2.1.6"

@@ -1,5 +1,6 @@
 package com.juan.pinya.view.login
 
+import android.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val stuffDao: StuffDao,
     private val sharedPreferencesManager: SharedPreferencesManager
+
 ) : ViewModel() {
 
     private val mIsLoginSuccess = SingleLiveEvent<LoginType>()
@@ -41,6 +43,7 @@ class LoginViewModel(
                 if (stuff?.password == password) {
                     sharedPreferencesManager.id = stuff.id
                     sharedPreferencesManager.password = stuff.password
+                    sharedPreferencesManager.name = stuff.name
                 }
                 loginType.isLoginSuccess = stuff?.password == password
                 mIsLoginSuccess.setValue(loginType)

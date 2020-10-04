@@ -10,25 +10,25 @@ import com.juan.pinya.R
 import com.juan.pinya.model.DailyReport
 import kotlinx.android.synthetic.main.item_addlist.view.*
 
-class DRA1Adapter(options: FirestoreRecyclerOptions<DailyReport>,
-                  private val listener: DailyReportAdd1Fragment
+class DRAdd2Adapter(options: FirestoreRecyclerOptions<DailyReport>,
+                    private val listener: DRAdd2Fragment
 ) :
-    FirestoreRecyclerAdapter<DailyReport, DRA1Adapter.DRA1ViewHoder>(options) {
+    FirestoreRecyclerAdapter<DailyReport, DRAdd2Adapter.DRA2ViewHoder>(options) {
 
-    class DRA1ViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class DRA2ViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var company = itemView.add_company_textView
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DRA1ViewHoder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DRA2ViewHoder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.item_addlist, parent, false)
-        return DRA1ViewHoder(itemView)
+        return DRA2ViewHoder(itemView)
     }
 
     override fun onBindViewHolder(
-        holder: DRA1ViewHoder,
+        holder: DRA2ViewHoder,
         position: Int,
         dailyReport: DailyReport
     ) {

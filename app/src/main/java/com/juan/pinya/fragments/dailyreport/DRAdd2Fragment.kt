@@ -16,8 +16,8 @@ import com.juan.pinya.model.DailyReport
 import com.juan.pinya.module.dailyReport.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.fragment_daily_report_add2.*
 
-class DailyReportAdd2Fragment : Fragment(), RecyclerViewClickListener {
-    private var adapter: DRA2Adapter? = null
+class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
+    private var adapter: DRAdd2Adapter? = null
 
     //    private var compostId = arguments?.getString("input_text")
     private var compostId: String? = null
@@ -57,7 +57,7 @@ class DailyReportAdd2Fragment : Fragment(), RecyclerViewClickListener {
             .setQuery(query, DailyReport::class.java)
             .build()
 
-        adapter = DRA2Adapter(options, this)
+        adapter = DRAdd2Adapter(options, this)
         rv_add2.layoutManager = LinearLayoutManager(this.context)
         rv_add2.adapter = adapter
     }

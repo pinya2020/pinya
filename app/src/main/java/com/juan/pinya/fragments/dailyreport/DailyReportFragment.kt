@@ -117,7 +117,7 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
     }
 
     fun showFragment() {
-        val fragment = DailyReportAdd1Fragment()
+        val fragment = DRAdd1Fragment()
         val manager: FragmentManager? = getFragmentManager()
         manager!!.beginTransaction().add(
             R.id.dailyReport_ConstraintLayout,

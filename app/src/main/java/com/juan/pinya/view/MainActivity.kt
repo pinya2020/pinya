@@ -10,7 +10,7 @@ import com.juan.pinya.R
 import com.juan.pinya.fragments.ExpenditureFragment
 import com.juan.pinya.fragments.StatisticsFragment
 import com.juan.pinya.fragments.dailyreport.Communicator
-import com.juan.pinya.fragments.dailyreport.DailyReportAdd2Fragment
+import com.juan.pinya.fragments.dailyreport.DRAdd2Fragment
 import com.juan.pinya.fragments.dailyreport.DailyReportFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         bundle.putString("input_text", msg)
 
         val transaction = this.supportFragmentManager.beginTransaction()
-        val frag2 = DailyReportAdd2Fragment()
+        val frag2 = DRAdd2Fragment()
         frag2.arguments = bundle
 
         transaction.replace(R.id.dailyReport_ConstraintLayout, frag2)

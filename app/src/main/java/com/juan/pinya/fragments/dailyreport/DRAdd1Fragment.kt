@@ -16,8 +16,8 @@ import com.juan.pinya.model.DailyReport
 import com.juan.pinya.module.dailyReport.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.fragment_daily_report_add1.*
 
-class DailyReportAdd1Fragment : Fragment(), RecyclerViewClickListener {
-    private var adapter: DRA1Adapter? = null
+class DRAdd1Fragment : Fragment(), RecyclerViewClickListener {
+    private var adapter: DRAdd1Adapter? = null
     private var newDailyReport = DailyReport()
     lateinit var comm: Communicator
 
@@ -54,7 +54,7 @@ class DailyReportAdd1Fragment : Fragment(), RecyclerViewClickListener {
             .setQuery(query, DailyReport::class.java)
             .build()
 
-        adapter = DRA1Adapter(options, this)
+        adapter = DRAdd1Adapter(options, this)
         rv_add1.layoutManager = LinearLayoutManager(this.context)
         rv_add1.adapter = adapter
     }
@@ -76,13 +76,13 @@ class DailyReportAdd1Fragment : Fragment(), RecyclerViewClickListener {
     }
 
     fun showFragment() {
-        val fragment = DailyReportAdd2Fragment()
+        val fragment = DRAdd2Fragment()
         val manager: FragmentManager? = getFragmentManager()
         manager!!.beginTransaction().replace(R.id.dailyReport_ConstraintLayout,
             fragment, fragment.tag).commit()
     }
     fun removeFragment() {
-        val fragment = DailyReportAdd2Fragment()
+        val fragment = DRAdd2Fragment()
         val manager: FragmentManager? = getFragmentManager()
         manager!!.beginTransaction().remove(fragment).commit()
     }

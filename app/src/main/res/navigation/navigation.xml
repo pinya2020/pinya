@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_dailyreport">
+    <fragment
+        android:id="@+id/dailyReportFragment"
+        android:name="com.juan.pinya.fragments.dailyreport.DailyReportFragment"
+        android:label="fragment_dailyreport"
+        tools:layout="@layout/fragment_dailyreport" >
+        <action
+            android:id="@+id/action_dailyReportFragment_to_dailyReportAdd1Fragment"
+            app:destination="@id/dailyReportAdd1Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dailyReportAdd1Fragment"
+        android:name="com.juan.pinya.fragments.dailyreport.DRAdd1Fragment"
+        android:label="fragment_daily_report_add1"
+        tools:layout="@layout/fragment_daily_report_add1" >
+        <action
+            android:id="@+id/action_dailyReportAdd1Fragment_to_dailyReportAdd2Fragment"
+            app:destination="@id/dailyReportAdd2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dailyReportAdd2Fragment"
+        android:name="com.juan.pinya.fragments.dailyreport.DRAdd2Fragment"
+        android:label="fragment_daily_report_add2"
+        tools:layout="@layout/fragment_daily_report_add2" >
+        <action
+            android:id="@+id/action_dailyReportAdd2Fragment_to_dailyReportAdd3Fragment"
+            app:destination="@id/dailyReportAdd3Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dailyReportAdd3Fragment"
+        android:name="com.juan.pinya.fragments.dailyreport.DailyReportAdd3Fragment"
+        android:label="fragment_daily_report_add3"
+        tools:layout="@layout/fragment_daily_report_add3" >
+        <action
+            android:id="@+id/action_dailyReportAdd3Fragment_to_dailyReportAdd4Fragment"
+            app:destination="@id/dailyReportAdd4Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dailyReportAdd4Fragment"
+        android:name="com.juan.pinya.fragments.dailyreport.DailyReportAdd4Fragment"
+        android:label="fragment_daily_report_add4"
+        tools:layout="@layout/fragment_daily_report_add4" />
+</navigation>

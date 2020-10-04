@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "545131593084",
+    "firebase_url": "https://pinya-ee223.firebaseio.com",
+    "project_id": "pinya-ee223",
+    "storage_bucket": "pinya-ee223.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545131593084:android:5c0b98a048257ef3aef8f9",
+        "android_client_info": {
+          "package_name": "com.juan.pinya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545131593084-at8l19ph6tj6nmhl5rict1q5pf42imnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.juan.pinya",
+            "certificate_hash": "2513f5c8770f0511b00690cf82bc479fffe240b6"
+          }
+        },
+        {
+          "client_id": "545131593084-i38u47icoktujvnbr2d8v2lk2k2pl5rv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALlL6BwW34b7v0FmXmykwUMZCGc-hXd2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545131593084-i38u47icoktujvnbr2d8v2lk2k2pl5rv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

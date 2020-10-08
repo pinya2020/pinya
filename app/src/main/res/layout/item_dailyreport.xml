@@ -1,123 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:stretchColumns="*"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/company_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="50dp"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow3"
-                tools:text="廠商" />
-
-            <TextView
-                android:id="@+id/site_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow2"
-                tools:text="工地" />
-
-            <TextView
-                android:id="@+id/price_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow3"
-                tools:text="單價" />
-
-
-            <TextView
-                android:id="@+id/itemDate_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow2"
-                android:text="0930"
-                tools:text="時間" />
-
-
-            <TextView
-                android:id="@+id/ps2_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow1"
-                android:text="備註" />
-
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/address_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:minHeight="50dp"
-                android:layout_span="2"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow1"
-                tools:text="地點" />
-
-
-            <TextView
-                android:id="@+id/numder_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:background="@color/pinya_yellow2"
-                tools:text="車次" />
-
-
-            <TextView
+        <TextView
             android:id="@+id/meter_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@color/pinya_yellow3"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/numder_textView"
+            app:layout_constraintEnd_toEndOf="@+id/itemDate_textView"
+            app:layout_constraintStart_toStartOf="@+id/itemDate_textView"
+            app:layout_constraintTop_toTopOf="@+id/numder_textView"
             tools:text="米數" />
 
-            <TextView
-                android:id="@+id/ps_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:maxWidth="100dp"
-                android:background="@color/pinya_yellow1"
-                tools:text="保2" />
+        <TextView
+            android:id="@+id/numder_textView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/pinya_yellow2"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
+            app:layout_constraintEnd_toEndOf="@+id/price_textView"
+            app:layout_constraintStart_toStartOf="@+id/price_textView"
+            app:layout_constraintTop_toTopOf="@+id/address_textView"
+            tools:text="車次" />
 
-        </TableRow>
+        <TextView
+            android:id="@+id/address_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="20sp"
+            android:background="@color/pinya_yellow1"
+            android:gravity="center"
+            android:lines="2"
+            android:minHeight="50dp"
+            android:padding="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/site_textView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/company_textView"
+            app:layout_constraintTop_toBottomOf="@+id/company_textView"
+            tools:text="地點" />
 
-    </TableLayout>
+        <TextView
+            android:id="@+id/company_textView"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:background="@color/pinya_yellow3"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="20sp"
+            android:lines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="廠商" />
+
+        <TextView
+            android:id="@+id/site_textView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow2"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/company_textView"
+            app:layout_constraintEnd_toStartOf="@+id/price_textView"
+            app:layout_constraintStart_toEndOf="@+id/company_textView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="工地" />
+
+        <TextView
+            android:id="@+id/itemDate_textView"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow2"
+            android:gravity="center"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/price_textView"
+            app:layout_constraintEnd_toStartOf="@+id/ps_textView"
+            app:layout_constraintTop_toTopOf="@+id/price_textView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="時間" />
+
+        <TextView
+            android:id="@+id/price_textView"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow3"
+            android:gravity="center"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/site_textView"
+            app:layout_constraintEnd_toStartOf="@+id/itemDate_textView"
+            app:layout_constraintTop_toTopOf="@+id/site_textView"
+            tools:text="單價" />
+
+        <TextView
+            android:id="@+id/ps_textView"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow1"
+            android:gravity="center"
+            android:lines="4"
+            android:padding="2dp"
+            android:text="備註"
+            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/itemDate_textView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

@@ -1,4 +1,4 @@
-package com.juan.pinya.fragments.dailyreport
+package com.juan.pinya.view.main.dailyReport
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

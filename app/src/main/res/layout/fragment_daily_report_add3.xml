@@ -6,7 +6,7 @@
     android:background="@color/pinya_yellow2"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".fragments.dailyreport.DailyReportAdd3Fragment">
+    tools:context=".view.main.dailyReport.DailyReportAdd3Fragment">
 
     <TextView
         android:id="@+id/add3_textView"
@@ -25,7 +25,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="126dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button

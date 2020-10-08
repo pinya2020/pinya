@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import com.juan.pinya.R
 import com.juan.pinya.extention.showAlertDialog
-import com.juan.pinya.view.MainActivity
+import com.juan.pinya.view.main.MainActivity
 
 sealed class LoginType(var isLoginSuccess: Boolean) {
     class Normal(isLoginSuccess: Boolean): LoginType(isLoginSuccess) {

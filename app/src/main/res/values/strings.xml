@@ -24,7 +24,7 @@
     <string name="text_address">地點：</string>
     <string name="text_price">單價：</string>
     <string name="text_meter">米數：</string>
-    <string name="text_date">時間：</string>
+    <string name="text_date2">時間：</string>
     <string name="text_number">車次：</string>
     <string name="text_ps">備註：</string>
 </resources>

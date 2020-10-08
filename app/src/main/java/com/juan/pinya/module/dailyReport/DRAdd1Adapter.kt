@@ -1,4 +1,4 @@
-package com.juan.pinya.fragments.dailyreport
+package com.juan.pinya.module.dailyReport
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.juan.pinya.R
 import com.juan.pinya.model.DailyReport
+import com.juan.pinya.view.main.dailyReport.DRAdd1Fragment
 import kotlinx.android.synthetic.main.item_addlist.view.*
 
 class DRAdd1Adapter(options: FirestoreRecyclerOptions<DailyReport>,

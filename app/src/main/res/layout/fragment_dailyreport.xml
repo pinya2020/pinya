@@ -5,7 +5,7 @@
     android:id="@+id/dailyReport_ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.dailyreport.DailyReportFragment">
+    tools:context=".view.main.dailyReport.DailyReportFragment">
 
     <TextView
         android:id="@+id/textView5"

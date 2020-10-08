@@ -13,8 +13,12 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
         set(value) = setValue(PASSWORD_KEY, value)
 
     var name: String
-        get() = getValue(NAME_KEY,"")
-        set(value) = setValue(NAME_KEY,value)
+        get() = getValue(NAME_KEY, "")
+        set(value) = setValue(NAME_KEY, value)
+
+    var isFirstLogin: Boolean
+        get() = getValue(IS_FIRST_LOGIN_KEY, true)
+        set(value) = setValue(IS_FIRST_LOGIN_KEY, value)
 
     private fun <T> setValue(key: String, value: T) {
         when (value) {
@@ -23,6 +27,9 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
             }
             is Int -> {
                 sharedPreferences.edit().putInt(key, value).apply()
+            }
+            is Boolean -> {
+                sharedPreferences.edit().putBoolean(key, value).apply()
             }
         }
     }
@@ -35,6 +42,9 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
             is Int -> {
                 sharedPreferences.getInt(key, defValue) as? T
             }
+            is Boolean -> {
+                sharedPreferences.getBoolean(key, defValue) as? T
+            }
             else -> {
                 defValue
             }
@@ -46,5 +56,6 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
         private const val ID_KEY = "id"
         private const val PASSWORD_KEY = "password"
         private const val NAME_KEY = "name"
+        private const val IS_FIRST_LOGIN_KEY = "isFirstLogin"
     }
 }

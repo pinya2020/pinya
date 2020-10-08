@@ -13,11 +13,12 @@ import com.google.firebase.firestore.Query
 import com.juan.pinya.R
 import com.juan.pinya.module.dailyReport.DRAdd3Adapter
 import com.juan.pinya.model.DailyReport
+import com.juan.pinya.module.dailyReport.DRAdd2Adapter
 import com.juan.pinya.module.dailyReport.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.fragment_daily_report_add2.*
 
-class DRAdd3Fragment : Fragment(), RecyclerViewClickListener {
-    private var adapter: DRAdd3Adapter? = null
+class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
+    private var adapter: DRAdd2Adapter? = null
     private var companyId: String? = null
 
     override fun onCreateView(
@@ -55,7 +56,7 @@ class DRAdd3Fragment : Fragment(), RecyclerViewClickListener {
             .setQuery(query, DailyReport::class.java)
             .build()
 
-        adapter = DRAdd3Adapter(options, this)
+        adapter = DRAdd2Adapter(options, this)
         rv_add2.layoutManager = LinearLayoutManager(this.context)
         rv_add2.adapter = adapter
     }
@@ -89,8 +90,8 @@ class DRAdd3Fragment : Fragment(), RecyclerViewClickListener {
 
     companion object {
         private const val COMPANY_ID_KEY = "companyId"
-        fun newInstance(companyId: String): DRAdd3Fragment {
-            return DRAdd3Fragment().apply {
+        fun newInstance(companyId: String): DRAdd2Fragment {
+            return DRAdd2Fragment().apply {
                 arguments = Bundle().also { bundle ->
                     bundle.putString(COMPANY_ID_KEY, companyId)
                 }

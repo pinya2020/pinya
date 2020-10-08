@@ -6,7 +6,7 @@
     android:background="@color/pinya_yellow2"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".fragments.dailyreport.DRAdd2Fragment">
+    tools:context=".view.main.dailyReport.DRAdd2Fragment">
 
     <TextView
         android:id="@+id/add2_textView"

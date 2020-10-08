@@ -16,12 +16,12 @@ class SingleLiveEvent<T>(t: T? = null) : MutableLiveData<T>(t) {
         })
     }
 
-    override fun setValue(value: T) {
+    override fun setValue(value: T?) {
         isChanged.set(true)
         super.setValue(value)
     }
 
-    override fun postValue(value: T) {
+    override fun postValue(value: T?) {
         isChanged.set(true)
         super.postValue(value)
     }

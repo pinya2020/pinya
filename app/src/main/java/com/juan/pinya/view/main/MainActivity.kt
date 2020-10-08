@@ -1,20 +1,17 @@
-package com.juan.pinya.view
+package com.juan.pinya.view.main
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.juan.pinya.R
-import com.juan.pinya.fragments.ExpenditureFragment
-import com.juan.pinya.fragments.StatisticsFragment
-import com.juan.pinya.fragments.dailyreport.Communicator
-import com.juan.pinya.fragments.dailyreport.DRAdd2Fragment
-import com.juan.pinya.fragments.dailyreport.DailyReportFragment
+import com.juan.pinya.module.Expenditure.ExpenditureFragment
+import com.juan.pinya.module.Statistics.StatisticsFragment
+import com.juan.pinya.view.main.dailyReport.DailyReportFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), Communicator {
+class MainActivity : AppCompatActivity() {
 
     private val dailyReportFragment by lazy { DailyReportFragment() }
     private val expenditureFragment by lazy { ExpenditureFragment() }
@@ -44,19 +41,5 @@ class MainActivity : AppCompatActivity(), Communicator {
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
-    }
-
-    override fun passDataCom(msg: String) {
-        val bundle = Bundle()
-        bundle.putString("input_text", msg)
-
-        val transaction = this.supportFragmentManager.beginTransaction()
-        val frag2 = DRAdd2Fragment()
-        frag2.arguments = bundle
-
-        transaction.replace(R.id.dailyReport_ConstraintLayout, frag2)
-            .addToBackStack(null)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
     }
 }

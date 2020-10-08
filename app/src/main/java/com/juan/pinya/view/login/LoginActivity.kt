@@ -6,16 +6,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.juan.pinya.R
+import com.juan.pinya.di.SHARED_PREFERENCES_NAME
 import com.juan.pinya.extention.showAlertDialog
 import com.juan.pinya.extention.showLoadingDialog
 import com.juan.pinya.extention.showToast
 import com.juan.pinya.model.LoginType
+import com.juan.pinya.module.SharedPreferencesManager
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModel<LoginViewModel>()
-
+    private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
     private var alertDialog : AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +30,9 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-//        alertDialog = showLoadingDialog()
+        if (!sharedPreferencesManager.isFirstLogin) {
+            alertDialog = showLoadingDialog()
+        }
         loginViewModel.autoLogin()
     }
 //enter登入
@@ -67,6 +72,4 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }

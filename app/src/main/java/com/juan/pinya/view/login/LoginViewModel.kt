@@ -44,9 +44,10 @@ class LoginViewModel(
                     sharedPreferencesManager.id = stuff.id
                     sharedPreferencesManager.password = stuff.password
                     sharedPreferencesManager.name = stuff.name
+                    sharedPreferencesManager.isFirstLogin = false
                 }
                 loginType.isLoginSuccess = stuff?.password == password
-                mIsLoginSuccess.setValue(loginType)
+                mIsLoginSuccess.value = loginType
             }.onFailure {
                 mError.setValue(it)
             }

@@ -32,7 +32,7 @@ class DRAdd2Adapter(options: FirestoreRecyclerOptions<DailyReport>,
         position: Int,
         dailyReport: DailyReport
     ) {
-        holder.company.text = dailyReport.company
+        holder.company.text = dailyReport.site
 
         holder.itemView.setOnClickListener{
             listener.onRecyclerViewItemClick(holder.itemView, dailyReport)

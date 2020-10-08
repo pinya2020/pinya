@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -25,6 +26,7 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
     private val cal = Calendar.getInstance()
     private var nowYear: Int = cal.get(Calendar.YEAR)
     private var nowMonth: Int = (cal.get(Calendar.MONTH) + 1)
+
 
     //如何抓名字
     private val userName: String = "王小明"
@@ -71,15 +73,16 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
 
     private fun setUpRv(id: String, year: String, month: String) {
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val calendar = Calendar.Builder()
+            .set(Calendar.YEAR, 2020)
+            .set(Calendar.MONTH, 9)
+            .set(Calendar.DAY_OF_MONTH, 4)
+            .build()
         val dailyReportRef: CollectionReference =
             db.collection(Stuff.DIR_NAME)
                 .document(id)
-                .collection("年")
-                .document(year)
-                .collection("月")
-                .document(month)
                 .collection(DailyReport.DIR_NAME)
-        val query: Query = dailyReportRef
+        val query: Query = dailyReportRef.whereEqualTo("date", Timestamp(calendar.time))
         val options = FirestoreRecyclerOptions.Builder<DailyReport>()
             .setQuery(query, DailyReport::class.java)
             .build()
@@ -110,23 +113,23 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_action -> {
-                showFragment()
+                showFragment(DRAdd1Fragment())
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun showFragment() {
-        val fragment = DRAdd1Fragment()
-        val manager: FragmentManager? = getFragmentManager()
-        manager!!.beginTransaction().add(
-            R.id.dailyReport_ConstraintLayout,
-            fragment, fragment.tag
-        ).commit()
+    fun showFragment(fragment: Fragment) {
+        val manager: FragmentManager? = parentFragmentManager
+        manager?.beginTransaction()?.apply {
+            add(R.id.dailyReport_ConstraintLayout, fragment, fragment.tag)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     override fun onRecyclerViewItemClick(view: View, dailyReport: DailyReport) {
-        Toast.makeText(requireContext(), "item click ${dailyReport.name}", Toast.LENGTH_LONG).show()
+        showFragment(DailyReportAdd4Fragment())
     }
 }
 

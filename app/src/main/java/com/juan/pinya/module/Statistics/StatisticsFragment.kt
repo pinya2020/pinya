@@ -1,4 +1,4 @@
-package com.juan.pinya.fragments
+package com.juan.pinya.module.Statistics
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

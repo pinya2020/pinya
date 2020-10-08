@@ -34,11 +34,10 @@ class DRAdd1Fragment : Fragment(), RecyclerViewClickListener {
         comm = activity as Communicator
         setUpRv()
         add1_cancel_button.setOnClickListener{
-            removeFragment()
+            parentFragmentManager.popBackStack()
         }
         add1_next_Button.setOnClickListener{
-            comm.passDataCom(newDailyReport.companyId.toString())
-            showFragment()
+            showFragment(newDailyReport.companyId.toString())
 //            val intent = Intent(this.context, DailyReportAdd2Fragment::class.java)
 //            intent.putExtra("compost", newDailyReport?.company.toString())
 //            intent.putExtra("compostId", newDailyReport?.companyId.toString())
@@ -75,16 +74,13 @@ class DRAdd1Fragment : Fragment(), RecyclerViewClickListener {
         adapter!!.stopListening()
     }
 
-    fun showFragment() {
-        val fragment = DRAdd2Fragment()
-        val manager: FragmentManager? = getFragmentManager()
-        manager!!.beginTransaction().replace(R.id.dailyReport_ConstraintLayout,
-            fragment, fragment.tag).commit()
-    }
-    fun removeFragment() {
-        val fragment = DRAdd2Fragment()
-        val manager: FragmentManager? = getFragmentManager()
-        manager!!.beginTransaction().remove(fragment).commit()
+    private fun showFragment(compostId: String) {
+        val fragment = DRAdd2Fragment.newInstance(compostId)
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.dailyReport_ConstraintLayout, fragment, fragment.tag)
+            addToBackStack(null)
+            commit()
+        }
     }
 }
 

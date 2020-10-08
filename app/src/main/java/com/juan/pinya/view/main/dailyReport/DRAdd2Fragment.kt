@@ -1,26 +1,24 @@
-package com.juan.pinya.fragments.dailyreport
+package com.juan.pinya.view.main.dailyReport
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.juan.pinya.R
+import com.juan.pinya.module.dailyReport.DRAdd3Adapter
 import com.juan.pinya.model.DailyReport
 import com.juan.pinya.module.dailyReport.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.fragment_daily_report_add2.*
 
-class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
-    private var adapter: DRAdd2Adapter? = null
-
-    //    private var compostId = arguments?.getString("input_text")
-    private var compostId: String? = null
+class DRAdd3Fragment : Fragment(), RecyclerViewClickListener {
+    private var adapter: DRAdd3Adapter? = null
+    private var companyId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +31,12 @@ class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        compostId = arguments?.getString("input_text")
-        if (compostId != null) {
-            setUpRv(compostId!!)
+        companyId = arguments?.getString(COMPANY_ID_KEY)
+        if (companyId != null) {
+            setUpRv(companyId!!)
         }
         add2_up_Button.setOnClickListener {
-            showFragment()
+            parentFragmentManager.popBackStack()
         }
         add2_next_Button.setOnClickListener {
             showFragment()
@@ -46,10 +44,10 @@ class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
         }
     }
 
-    private fun setUpRv(compostId: String) {
+    private fun setUpRv(companyId: String) {
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dailyReportRef: CollectionReference =
-            db.collection("廠商").document(compostId)
+            db.collection("廠商").document(companyId)
                 .collection("工地")
 
         val query: Query = dailyReportRef
@@ -57,7 +55,7 @@ class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
             .setQuery(query, DailyReport::class.java)
             .build()
 
-        adapter = DRAdd2Adapter(options, this)
+        adapter = DRAdd3Adapter(options, this)
         rv_add2.layoutManager = LinearLayoutManager(this.context)
         rv_add2.adapter = adapter
     }
@@ -80,14 +78,24 @@ class DRAdd2Fragment : Fragment(), RecyclerViewClickListener {
         }
     }
 
-    fun showFragment() {
+    private fun showFragment() {
         val fragment = DailyReportAdd3Fragment()
-        val manager: FragmentManager? = getFragmentManager()
-        manager!!.beginTransaction().replace(
-            R.id.dailyReport_ConstraintLayout,
-            fragment, fragment.tag
-        ).commit()
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.dailyReport_ConstraintLayout, fragment, fragment.tag)
+                addToBackStack(null)
+                commit()
+            }
     }
 
+    companion object {
+        private const val COMPANY_ID_KEY = "companyId"
+        fun newInstance(companyId: String): DRAdd3Fragment {
+            return DRAdd3Fragment().apply {
+                arguments = Bundle().also { bundle ->
+                    bundle.putString(COMPANY_ID_KEY, companyId)
+                }
+            }
+        }
+    }
 }
 

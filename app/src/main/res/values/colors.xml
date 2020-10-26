@@ -6,6 +6,11 @@
 <!--    pinya-->
     <color name="pinya_checked">#FFFFFF</color>
     <color name="pinya_dackground">#FFF1D0</color>
+    <color name="pinya_system_black">#666666</color>
+    <color name="pinya_black0">#212121</color>
+    <color name="pinya_black1">#333333</color>
+    <color name="pinya_black2">#C0C0C0</color>
+
     <color name="pinya_green0">#318014</color>
     <color name="pinya_green1">#BFE8B0</color>
     <color name="pinya_green2">#8DDB8A</color>
@@ -13,6 +18,7 @@
     <color name="pinya_yellow1">#FCF3E8</color>
     <color name="pinya_yellow2">#FFF1D0</color>
     <color name="pinya_yellow3">#F0D7A0</color>
+    <color name="background_delete_button">#FF3C30</color>
 
 
 </resources>

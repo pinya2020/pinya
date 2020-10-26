@@ -24,6 +24,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        id_editText.setText(sharedPreferencesManager.id)
+        password_editText.setText(sharedPreferencesManager.password)
         initViews()
         setObservers()
     }
@@ -32,8 +34,8 @@ class LoginActivity : AppCompatActivity() {
         super.onResume()
         if (!sharedPreferencesManager.isFirstLogin) {
             alertDialog = showLoadingDialog()
+            loginViewModel.autoLogin()
         }
-        loginViewModel.autoLogin()
     }
 //enter登入
     private fun initViews() {

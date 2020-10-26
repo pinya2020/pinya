@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp">
+    android:layout_marginBottom="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/pinya_yellow1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,8 +41,8 @@
             android:id="@+id/address_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
             android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
             android:background="@color/pinya_yellow1"
             android:gravity="center"
             android:lines="2"
@@ -57,19 +58,19 @@
             android:id="@+id/company_textView"
             android:layout_width="80dp"
             android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
             android:background="@color/pinya_yellow3"
             android:gravity="center"
-            android:minHeight="50dp"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMaxTextSize="20sp"
             android:lines="1"
+            android:minHeight="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="廠商" />
 
         <TextView
             android:id="@+id/site_textView"
-            android:layout_width="0dp"
+            android:layout_width="80dp"
             android:layout_height="0dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"
@@ -78,7 +79,6 @@
             android:lines="1"
             android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/company_textView"
-            app:layout_constraintEnd_toStartOf="@+id/price_textView"
             app:layout_constraintStart_toEndOf="@+id/company_textView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="工地" />
@@ -93,7 +93,7 @@
             android:gravity="center"
             android:lines="1"
             app:layout_constraintBottom_toBottomOf="@+id/price_textView"
-            app:layout_constraintEnd_toStartOf="@+id/ps_textView"
+            app:layout_constraintStart_toEndOf="@+id/price_textView"
             app:layout_constraintTop_toTopOf="@+id/price_textView"
             app:layout_constraintVertical_bias="0.0"
             tools:text="時間" />
@@ -108,24 +108,27 @@
             android:gravity="center"
             android:lines="1"
             app:layout_constraintBottom_toBottomOf="@+id/site_textView"
-            app:layout_constraintEnd_toStartOf="@+id/itemDate_textView"
+            app:layout_constraintStart_toEndOf="@+id/site_textView"
             app:layout_constraintTop_toTopOf="@+id/site_textView"
             tools:text="單價" />
 
         <TextView
             android:id="@+id/ps_textView"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_yellow1"
             android:gravity="center"
-            android:lines="4"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:minWidth="50dp"
             android:padding="2dp"
-            android:text="備註"
             app:layout_constraintBottom_toBottomOf="@+id/address_textView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/itemDate_textView" />
+            app:layout_constraintStart_toEndOf="@+id/itemDate_textView"
+            app:layout_constraintTop_toTopOf="@+id/itemDate_textView"
+            tools:text="備註" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -8,4 +8,8 @@
         <item name="android:windowBackground">@color/pinya_dackground</item>
     </style>
 
+    <style name="DatePickerDialog" parent="android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

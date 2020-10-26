@@ -17,9 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".view.main.MainActivity" />
-
+        <activity android:name=".view.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- 鍵盤彈起畫面上移＾ -->
     </application>
 
 </manifest>

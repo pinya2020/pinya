@@ -1,8 +1,14 @@
 package com.juan.pinya.view.main.dailyReport
 
+import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,26 +19,49 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.juan.pinya.R
 import com.juan.pinya.di.SHARED_PREFERENCES_NAME
+import com.juan.pinya.extention.setTodayStartTime
 import com.juan.pinya.model.DailyReport
 import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
-import com.juan.pinya.module.dailyReport.DailyReportAdapter
+import com.juan.pinya.module.dailyReport.BaseFragment
+import com.juan.pinya.module.swipe.DeleteButton
+import com.juan.pinya.view.main.dailyReport.company.CompanyFragment
+import com.juan.pinya.view.main.dailyReport.edit.DailyReportEditFragment
+import com.juan.pinya.module.swipe.DailyReportSwipeHelper
+import com.juan.pinya.view.main.MainActivity
+import com.juan.pinya.view.main.dailyReport.carId.CarDialogFragment
+import kotlinx.android.synthetic.main.carid_alertdialog.view.*
 import kotlinx.android.synthetic.main.fragment_dailyreport.*
-import java.util.*
-import com.juan.pinya.module.dailyReport.RecyclerViewClickListener
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class DailyReportFragment : Fragment(), RecyclerViewClickListener {
-    private var adapter: DailyReportAdapter? = null
-    private val cal = Calendar.getInstance()
-    private var nowYear: Int = cal.get(Calendar.YEAR)
-    private var nowMonth: Int = cal.get(Calendar.MONTH)
-    private var nowDay: Int = cal.get(Calendar.DAY_OF_MONTH)
+class DailyReportFragment : BaseFragment() {
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
+    private val calendar = Calendar.getInstance().setTodayStartTime()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val adapter: DailyReportAdapter by lazy {
+        DailyReportAdapter(getOptions(calendar)) { dailyReport ->
+            val fragment = DailyReportEditFragment.newInstance(dailyReport)
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
+                addToBackStack(null)
+                commit()
+            }
+        }
+    }
 
-    //getname
+    //getName
     private val userName: String = sharedPreferencesManager.name
+    private val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //show title menu
+        setHasOptionsMenu(true)
+        showCarId()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,64 +74,110 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //toolbar
-        setHasOptionsMenu(true)
         userName_TextView.text = userName
-        date_textView.text = "$nowYear/${nowMonth+1}/$nowDay"
-        setUpRv(nowYear, nowMonth, nowDay)
+        carId_TextView.text = sharedPreferencesManager.carId
+        date_textView.text = simpleDateFormat.format(calendar.time)
+        setUpRv()
 
         carId_imageButtom.setOnClickListener {
+            showCarIdDialog()
         }
 
         data_imageButton.setOnClickListener {
-            val year = cal.get(Calendar.YEAR)
-            val month = cal.get(Calendar.MONTH)
-            val day = cal.get(Calendar.DAY_OF_MONTH)
-
-            this.context?.let { it1 ->
-                DatePickerDialog(it1, { _, year, month, day ->
-                    kotlin.run {
-                        val showDate = "$year/${month+1}/$day"
-                        date_textView.text = showDate
-                        adapter?.stopListening()
-                        setUpRv(year, month, day)
-                        adapter?.startListening()
-
-                    }
-                }, year, month, day).show()
-            }
+            showDatePickerDialog(date_textView)
         }
     }
 
-    private fun setUpRv(year: Int, month: Int, day: Int) {
-        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val calendar = Calendar.Builder()
-            .set(Calendar.YEAR, year)
-            .set(Calendar.MONTH, month)
-            .set(Calendar.DAY_OF_MONTH, day)
-            .build()
+    private fun showCarId() {
+        super.onResume()
+        val carId = sharedPreferencesManager.carId
+        if (carId.isNotEmpty()) {
+            val alertDialogItem =
+                LayoutInflater.from(this.context).inflate(R.layout.carid_alertdialog, null)
+            AlertDialog.Builder(this.context)
+                .setView(alertDialogItem)
+                .setPositiveButton(R.string.text_enter, null)
+                .setNegativeButton(R.string.text_change, { dialog, which -> showCarIdDialog() })
+                .setCancelable(false)
+                .show()
+            alertDialogItem.carId_alertDialog_textView.text = carId
+        } else {
+            showCarIdDialog()
+        }
+    }
+
+    private fun setUpRv() {
+        dailyreport_recylerView.layoutManager = LinearLayoutManager(this.context)
+        dailyreport_recylerView.adapter = adapter
+        val swipe =
+            object : DailyReportSwipeHelper(requireContext(), dailyreport_recylerView!!, 300) {
+                override fun instantiateMyButton(
+                    dailyReport: DailyReport,
+                    buffer: MutableList<DeleteButton>
+                ) {
+
+                    buffer.add(DeleteButton(requireContext(),
+                        getString(R.string.text_delete),
+                        100,
+                        0,
+                        ContextCompat.getColor(requireContext(),
+                            R.color.background_delete_button)) {
+                        db.collection(Stuff.DIR_NAME)
+                            .document(sharedPreferencesManager.id)
+                            .collection(DailyReport.DIR_NAME)
+                            .document(dailyReport.id ?: return@DeleteButton)
+                            .delete()
+                            .addOnSuccessListener { deleteAdminDailyReport(dailyReport) }
+                            .addOnFailureListener {
+                                Toast.makeText(context,
+                                    "delete fail",
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                    })
+                }
+            }
+    }
+
+    private fun getOptions(calendar: Calendar): FirestoreRecyclerOptions<DailyReport> {
+        val todayTime = calendar.time
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val tomorrowTime = calendar.time
+        calendar.add(Calendar.DAY_OF_MONTH, -1)
         val dailyReportRef: CollectionReference =
             db.collection(Stuff.DIR_NAME)
                 .document(sharedPreferencesManager.id)
                 .collection(DailyReport.DIR_NAME)
-        val query: Query = dailyReportRef.whereEqualTo("date", Timestamp(calendar.time))
-        val options = FirestoreRecyclerOptions.Builder<DailyReport>()
+        val query: Query = dailyReportRef
+            .whereGreaterThanOrEqualTo("date", Timestamp(todayTime))
+            .whereLessThan("date", Timestamp(tomorrowTime))
+
+        return FirestoreRecyclerOptions.Builder<DailyReport>()
             .setQuery(query, DailyReport::class.java)
             .build()
+    }
 
-        adapter = DailyReportAdapter(options, this)
-        dailyreport_recylerView.layoutManager = LinearLayoutManager(this.context)
-        dailyreport_recylerView.adapter = adapter
+    private fun deleteAdminDailyReport(dailyReport: DailyReport) {
+        db.collection(DailyReport.DIR_NAME)
+            .document(dailyReport.id ?: return)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(context,
+                    "delete admin success",
+                    Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "delete admin fail", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onStart() {
         super.onStart()
-        adapter!!.startListening()
+        adapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-        adapter!!.stopListening()
+        adapter.stopListening()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -114,23 +189,51 @@ class DailyReportFragment : Fragment(), RecyclerViewClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_action -> {
-                showFragment(DRAdd1Fragment())
+                showFragment(CompanyFragment.newInstance())
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun showFragment(fragment: Fragment) {
+    private fun showFragment(fragment: Fragment) {
         val manager: FragmentManager? = parentFragmentManager
         manager?.beginTransaction()?.apply {
-            add(R.id.dailyReport_ConstraintLayout, fragment, fragment.tag)
+            add(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
             addToBackStack(null)
             commit()
         }
     }
 
-    override fun onRecyclerViewItemClick(view: View, dailyReport: DailyReport) {
-        showFragment(DailyReportAdd4Fragment())
+    private fun showDatePickerDialog(textView: TextView) {
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        context?.let { context ->
+            DatePickerDialog(context, { _, year, month, day ->
+                val showDate = "$year/${month + 1}/$day"
+                textView.text = showDate
+                calendar.apply {
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                    set(Calendar.DAY_OF_MONTH, day)
+                }
+                adapter.updateOptions(getOptions(calendar))
+            }, year, month, day).show()
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            val carId = data?.getStringExtra("carId")
+            sharedPreferencesManager.carId = carId as String
+            carId_TextView.text = carId
+        }
+    }
+
+    companion object {
+        const val CAR_ID_REQUEST = 1
     }
 }
 

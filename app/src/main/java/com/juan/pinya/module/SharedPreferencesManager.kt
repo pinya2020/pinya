@@ -16,6 +16,10 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
         get() = getValue(NAME_KEY, "")
         set(value) = setValue(NAME_KEY, value)
 
+    var carId: String
+        get() = getValue(CAR_ID_KEY, "")
+        set(value) = setValue(CAR_ID_KEY, value)
+
     var isFirstLogin: Boolean
         get() = getValue(IS_FIRST_LOGIN_KEY, true)
         set(value) = setValue(IS_FIRST_LOGIN_KEY, value)
@@ -57,5 +61,6 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
         private const val PASSWORD_KEY = "password"
         private const val NAME_KEY = "name"
         private const val IS_FIRST_LOGIN_KEY = "isFirstLogin"
+        private const val CAR_ID_KEY = "carId"
     }
 }

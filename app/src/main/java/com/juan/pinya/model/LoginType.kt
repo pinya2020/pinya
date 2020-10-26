@@ -10,7 +10,7 @@ sealed class LoginType(var isLoginSuccess: Boolean) {
     class Normal(isLoginSuccess: Boolean): LoginType(isLoginSuccess) {
         override fun action(activity: Activity, loadingDialog: Dialog?) {
             if (isLoginSuccess) {
-                gotoMainActivity(activity)
+                gotoMainActivity(activity, loadingDialog)
             } else {
                 loadingDialog?.dismiss()
                 activity.showAlertDialog(
@@ -26,14 +26,15 @@ sealed class LoginType(var isLoginSuccess: Boolean) {
     class AutoLogin(isLoginSuccess: Boolean): LoginType(isLoginSuccess) {
         override fun action(activity: Activity, loadingDialog: Dialog?) {
             if (isLoginSuccess) {
-                gotoMainActivity(activity)
+                gotoMainActivity(activity, loadingDialog)
             } else {
                 loadingDialog?.dismiss()
             }
         }
     }
 
-    protected fun gotoMainActivity(activity: Activity) {
+    protected fun gotoMainActivity(activity: Activity, loadingDialog: Dialog?) {
+        loadingDialog?.dismiss()
         val intent = MainActivity.getIntent(activity)
         activity.startActivity(intent)
         activity.finish()

@@ -1,23 +1,60 @@
 package com.juan.pinya.model
 
+import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+import java.util.*
 
-class DailyReport{
-    @SerializedName("address")val address: String? = null
-    @SerializedName("carId") val carId: String? = null
-    @SerializedName("company") var company: String? = null
-    @SerializedName("date") val date: Timestamp? = null
-    @SerializedName("id") val id: String? = null
-    @SerializedName("meter") val meter: Int? = null
-    @SerializedName("name") val name: String? = null
-    @SerializedName("number") val number: Int? = null
-    @SerializedName("price") val price: Int? = null
-    @SerializedName("ps") val ps: String? = null
-    @SerializedName("site") val site: String? = null
-    @SerializedName("companyId") var companyId: String? = null
-    @SerializedName("siteId") val siteId: String? = null
-    @SerializedName("addressId") val addressId: String? = null
+@Parcelize
+data class DailyReport(
+
+    @SerializedName("id")
+    val id: String? = null,
+
+    @SerializedName("address")
+    val address: String = "",
+
+    @SerializedName("carId")
+    val carId: String = "",
+
+    @SerializedName("company")
+    val company: String = "",
+
+    @SerializedName("date")
+    val date: Timestamp = Timestamp(Date()),
+
+    @SerializedName("meter")
+    val meter: Int = Int.MIN_VALUE,
+
+    @SerializedName("userName")
+    val userName: String = "",
+
+    @SerializedName("userId")
+    val userId: String = "",
+
+
+    @SerializedName("number")
+    val number: Int = Int.MIN_VALUE,
+
+    @SerializedName("price")
+    val price: Int = Int.MIN_VALUE,
+
+    @SerializedName("ps")
+    val ps: String = "",
+
+    @SerializedName("site")
+    val site: String = "",
+
+    @SerializedName("companyId")
+    val companyId: String = "",
+
+    @SerializedName("siteId")
+    val siteId: String = "",
+
+    @SerializedName("addressId")
+    val addressId: String = ""
+) : Parcelable {
 
     companion object {
         const val DIR_NAME = "日報表"

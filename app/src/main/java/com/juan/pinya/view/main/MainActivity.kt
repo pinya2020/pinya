@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.juan.pinya.R
-import com.juan.pinya.module.Expenditure.ExpenditureFragment
 import com.juan.pinya.module.Statistics.StatisticsFragment
 import com.juan.pinya.view.main.dailyReport.DailyReportFragment
+import com.juan.pinya.view.main.expenditure.ExpenditureFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -42,4 +42,9 @@ class MainActivity : AppCompatActivity() {
             return Intent(context, MainActivity::class.java)
         }
     }
+
+    fun setBottomNavigationVisibility(visibility: Int){
+        btnav.visibility = visibility
+    }
+
 }

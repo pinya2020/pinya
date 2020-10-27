@@ -1,6 +1,5 @@
 package com.juan.pinya.view.login
 
-import android.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,11 +25,11 @@ class LoginViewModel(
 
     fun autoLogin() {
         if (
-            sharedPreferencesManager.id.isNotEmpty()
+            sharedPreferencesManager.stuffId.isNotEmpty()
             && sharedPreferencesManager.password.isNotEmpty()
         ) {
             doLoginAction(
-                sharedPreferencesManager.id,
+                sharedPreferencesManager.stuffId,
                 sharedPreferencesManager.password,
                 LoginType.AutoLogin(false)
             )
@@ -41,7 +40,7 @@ class LoginViewModel(
         viewModelScope.launch {
             stuffDao.getStuffById(id).onSuccess { stuff ->
                 if (stuff?.password == password) {
-                    sharedPreferencesManager.id = stuff.id
+                    sharedPreferencesManager.stuffId = stuff.id
                     sharedPreferencesManager.password = stuff.password
                     sharedPreferencesManager.name = stuff.name
                     sharedPreferencesManager.isFirstLogin = false

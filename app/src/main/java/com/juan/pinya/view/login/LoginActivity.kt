@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        id_editText.setText(sharedPreferencesManager.id)
+        id_editText.setText(sharedPreferencesManager.stuffId)
         password_editText.setText(sharedPreferencesManager.password)
         initViews()
         setObservers()

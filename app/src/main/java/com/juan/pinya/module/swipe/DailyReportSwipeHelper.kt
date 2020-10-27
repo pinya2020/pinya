@@ -41,7 +41,7 @@ abstract class DailyReportSwipeHelper(
         }
     }
 
-    private val onTouchListener = View.OnTouchListener { view, motionEvent ->
+     val onTouchListener = View.OnTouchListener { view, motionEvent ->
         if (swipePosition < 0) return@OnTouchListener false
         val point = Point(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())
 
@@ -63,7 +63,6 @@ abstract class DailyReportSwipeHelper(
             }
         }
         false
-
     }
 
     private fun recoverSwipedItem() {

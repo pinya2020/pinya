@@ -21,7 +21,7 @@ data class DailyReport(
     @SerializedName("company")
     val company: String = "",
 
-    @SerializedName("date")
+    @SerializedName(DATE_KEY)
     val date: Timestamp = Timestamp(Date()),
 
     @SerializedName("meter")
@@ -58,5 +58,6 @@ data class DailyReport(
 
     companion object {
         const val DIR_NAME = "日報表"
+        const val DATE_KEY = "date"
     }
 }

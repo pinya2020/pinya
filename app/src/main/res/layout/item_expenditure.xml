@@ -25,13 +25,13 @@
 
                 <TextView
                     android:id="@+id/type_textView"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:minHeight="50dp"
                     android:background="@color/pinya_yellow3"
                     android:gravity="center"
                     android:textSize="20sp"
-                    tools:text="@string/text_type" />
+                    tools:text="油錢油" />
 
                 <TextView
                     android:id="@+id/carId_textView"
@@ -68,21 +68,21 @@
                 android:visibility="visible">
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:background="@color/pinya_yellow2"
+
                     android:textSize="20sp"
                     android:gravity="center"
                     android:text="@string/text_ps"/>
                 <TextView
                     android:id="@+id/ps_textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:background="@color/pinya_yellow1"
                     android:layout_span="3"
                     android:textSize="20sp"
                     android:autoSizeMaxTextSize="20sp"
-                    android:autoSizeMinTextSize="14sp"
                     android:autoSizeTextType="uniform"
                     android:maxLines="2"
                     android:ellipsize="end"

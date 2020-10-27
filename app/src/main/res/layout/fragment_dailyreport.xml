@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="@string/text_cardId1"
+        android:text="@string/text_carId1"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/userName_TextView"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
@@ -164,7 +164,7 @@
 
         <TextView
             android:id="@+id/company_textView"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"
@@ -178,7 +178,7 @@
 
         <TextView
             android:id="@+id/site_textView"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="0dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"
@@ -193,7 +193,7 @@
 
         <TextView
             android:id="@+id/itemDate_textView"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="0dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"
@@ -207,7 +207,7 @@
 
         <TextView
             android:id="@+id/price_textView"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="0dp"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeTextType="uniform"

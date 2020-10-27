@@ -33,15 +33,15 @@
     <string name="text_finishes">完成</string>
     <string name="text_please_select_carId">請選擇車號</string>
     <string name="text_delete">刪除</string>
-    <string name="format_meter">%d 米</string>
+    <string name="format_meter">%d米</string>
     <string name="format_number">no.%d</string>
     <string name="format_hour_minute">$d:$d</string>
     <string name="text_change">更換</string>
-    <string name="format_price">%d 元</string>
+    <string name="format_price">%d元</string>
     <string name="text_updata_dailyreport">修改日報表</string>
     <string name="text_add_dailyreport">新增日報表</string>
     <string name="text_driver1">司機：</string>
-    <string name="text_cardId1">車號：</string>
+    <string name="text_carId1">車號：</string>
     <string name="text_date1">日期：</string>
     <string name="text_violation1">違規點數：</string>
     <string name="text_company">廠商</string>
@@ -60,4 +60,7 @@
     <string name="text_newExpenditure">新增支出表</string>
     <string name="text_type1">類型：</string>
     <string name="text_price1">價格：</string>
+    <string name="text_delete_fail">刪除失敗</string>
+    <string name="text_delete_success">刪除成功</string>
+    <string name="text_delete_admin_fail">刪除失敗！</string>
 </resources>

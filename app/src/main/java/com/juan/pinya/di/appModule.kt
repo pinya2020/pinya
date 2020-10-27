@@ -1,7 +1,11 @@
 package com.juan.pinya.di
 
 import android.content.Context
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
+import com.juan.pinya.model.Stuff
+import com.juan.pinya.model.stuff.StuffRepository
+import com.juan.pinya.model.stuff.StuffRepositoryImpl
 import com.juan.pinya.module.SharedPreferencesManager
 import com.juan.pinya.module.StuffDao
 import com.juan.pinya.module.StuffDaoImpl
@@ -17,9 +21,19 @@ val appModule = module {
     single<StuffDao> { StuffDaoImpl(get()) }
 
     single(SHARED_PREFERENCES_NAME) {
-        androidContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            androidContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }
     single(SHARED_PREFERENCES_NAME) {
         SharedPreferencesManager(get(SHARED_PREFERENCES_NAME))
+    }
+    single {
+        FirebaseFirestore
+            .getInstance()
+            .collection(Stuff.DIR_NAME)
+    }
+    single<StuffRepository> {
+        StuffRepositoryImpl(
+            stuffCollection = get()
+        )
     }
 }

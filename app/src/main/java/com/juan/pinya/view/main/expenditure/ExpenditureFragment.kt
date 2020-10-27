@@ -22,6 +22,7 @@ import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
 import com.juan.pinya.module.swipe.DeleteButton
 import com.juan.pinya.module.swipe.ExpenditureSwipeHelper
+import kotlinx.android.synthetic.main.fragment_dailyreport.*
 import kotlinx.android.synthetic.main.fragment_expenditure.*
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
@@ -115,16 +116,21 @@ class ExpenditureFragment : Fragment() {
                     100,
                     0,
                     ContextCompat.getColor(requireContext(), R.color.background_delete_button)) {
+                    expenditure_recylerView.suppressLayout(true)
                     db.collection(Stuff.DIR_NAME)
-                        .document(sharedPreferencesManager.id)
+                        .document(sharedPreferencesManager.stuffId)
                         .collection(Expenditure.DIR_NAME)
                         .document(expenditure.id ?: return@DeleteButton)
                         .delete()
-                        .addOnSuccessListener { deleteAdminExpenditure(expenditure) }
+                        .addOnSuccessListener {
+                            deleteAdminExpenditure(expenditure)
+                            expenditure_recylerView.suppressLayout(false)
+                        }
                         .addOnFailureListener {
                             Toast.makeText(context,
-                                "delete fail",
+                                R.string.text_delete_fail,
                                 Toast.LENGTH_SHORT).show()
+                            expenditure_recylerView.suppressLayout(false)
                         }
                 })
             }
@@ -135,6 +141,16 @@ class ExpenditureFragment : Fragment() {
         db.collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .delete()
+            .addOnSuccessListener {
+                Toast.makeText(context,
+                    R.string.text_delete_success,
+                    Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context,
+                    R.string.text_delete_admin_fail,
+                    Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun getOptions(calendar: Calendar): FirestoreRecyclerOptions<Expenditure> {
@@ -144,7 +160,7 @@ class ExpenditureFragment : Fragment() {
         calendar.add(Calendar.MONTH, -1)
         val expenditureRef: CollectionReference =
             db.collection(Stuff.DIR_NAME)
-                .document(sharedPreferencesManager.id)
+                .document(sharedPreferencesManager.stuffId)
                 .collection(Expenditure.DIR_NAME)
         val query: Query = expenditureRef
             .whereGreaterThanOrEqualTo("date", Timestamp(todayMount))

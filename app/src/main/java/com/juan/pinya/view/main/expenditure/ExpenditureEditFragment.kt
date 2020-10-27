@@ -7,16 +7,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.juan.pinya.R
 import com.juan.pinya.di.SHARED_PREFERENCES_NAME
-import com.juan.pinya.model.DailyReport
 import com.juan.pinya.model.Expenditure
 import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
 import com.juan.pinya.module.dailyReport.BaseFragment
+import kotlinx.android.synthetic.main.fragment_daily_report_add4.*
 import kotlinx.android.synthetic.main.fragment_expenditure_edit.*
 import kotlinx.android.synthetic.main.fragment_expenditure_edit.add4_textView
 import org.koin.android.ext.android.inject
@@ -92,7 +91,7 @@ class ExpenditureEditFragment : BaseFragment() {
         }
 
         ps_editText.setHorizontallyScrolling(false)
-        ps_editText.maxLines = 3
+        ps_editText.maxLines = Int.MAX_VALUE
         ps_editText.setText(newExpenditure.ps)
 
         type_imageButton.setOnClickListener { showTypeDialog() }
@@ -112,7 +111,7 @@ class ExpenditureEditFragment : BaseFragment() {
             val price = price_editText.text.toString().toInt()
             val ps = ps_editText.text.trim().toString()
             val expenditure = newExpenditure.copy(
-                userId = sharedPreferencesManager.id,
+                userId = sharedPreferencesManager.stuffId,
                 type = type,
                 date = date,
                 carId = carId,
@@ -132,7 +131,7 @@ class ExpenditureEditFragment : BaseFragment() {
     }
 
     private fun addExpenditure(expenditure: Expenditure) {
-        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.id)
+        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
             .collection(Expenditure.DIR_NAME).document()
         val addExpenditure = expenditure.copy(id = ref.id)
         ref.set(addExpenditure)
@@ -144,7 +143,7 @@ class ExpenditureEditFragment : BaseFragment() {
     }
 
     private fun setExpenditure(expenditure: Expenditure) {
-        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.id)
+        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
             .collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .set(expenditure)

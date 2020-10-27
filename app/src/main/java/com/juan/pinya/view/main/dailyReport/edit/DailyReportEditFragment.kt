@@ -1,10 +1,13 @@
 package com.juan.pinya.view.main.dailyReport.edit
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.IntegerRes
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.juan.pinya.R
@@ -17,6 +20,7 @@ import com.juan.pinya.view.main.dailyReport.address.AddressFragment
 import com.juan.pinya.view.main.dailyReport.company.CompanyFragment
 import com.juan.pinya.view.main.dailyReport.site.SiteFragment
 import kotlinx.android.synthetic.main.fragment_daily_report_add4.*
+import kotlinx.android.synthetic.main.fragment_daily_report_add4.data_imageButton
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +44,7 @@ class DailyReportEditFragment : BaseFragment() {
         .set(Calendar.MINUTE, nowMinute)
         .build()
     private var date = Timestamp(calendar.time)
+    private var carId = ""
     override var bottomNavigationViewVisibility = View.GONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +69,11 @@ class DailyReportEditFragment : BaseFragment() {
         } else {
             add4_textView.text = getString(R.string.text_add_dailyreport)
         }
+        carId = newDailyReport.carId
+        add4_carId_textView.text = carId
+        add4_carId_imageButton.setOnClickListener {
+            showCarIdDialog()
+        }
         add4_company_textView.text = newDailyReport.company
         add4_site_textView.text = newDailyReport.site
         add4_address_textView.text = newDailyReport.address
@@ -80,8 +90,9 @@ class DailyReportEditFragment : BaseFragment() {
         if (newDailyReport.number != Int.MIN_VALUE) {
             add4_number_editText.setText(newDailyReport.number.toString())
         }
+        //EditTextView actionDone + Multiline
         add4_ps_editText.setHorizontallyScrolling(false)
-        add4_ps_editText.maxLines = 3
+        add4_ps_editText.maxLines = Int.MAX_VALUE
         add4_ps_editText.setText(newDailyReport.ps)
 
         add4_company_textView.setOnClickListener {
@@ -120,21 +131,19 @@ class DailyReportEditFragment : BaseFragment() {
 
             this.context?.let { it1 ->
                 DatePickerDialog(it1, { _, year, month, day ->
-                    kotlin.run {
-                        nowYear = year
-                        nowMonth = month
-                        nowDay = day
-                        val showDate = "$nowYear/${nowMonth + 1}/$nowDay"
-                        val calendar = Calendar.Builder()
-                            .set(Calendar.YEAR, nowYear)
-                            .set(Calendar.MONTH, nowMonth)
-                            .set(Calendar.DAY_OF_MONTH, nowDay)
-                            .set(Calendar.HOUR, nowHour)
-                            .set(Calendar.MINUTE, nowMinute)
-                            .build()
-                        date = Timestamp(calendar.time)
-                        add4_date_textView.text = showDate
-                    }
+                    nowYear = year
+                    nowMonth = month
+                    nowDay = day
+                    val showDate = "$nowYear/${nowMonth + 1}/$nowDay"
+                    val calendar = Calendar.Builder()
+                        .set(Calendar.YEAR, nowYear)
+                        .set(Calendar.MONTH, nowMonth)
+                        .set(Calendar.DAY_OF_MONTH, nowDay)
+                        .set(Calendar.HOUR, nowHour)
+                        .set(Calendar.MINUTE, nowMinute)
+                        .build()
+                    date = Timestamp(calendar.time)
+                    add4_date_textView.text = showDate
                 }, year, month, day).show()
             }
         }
@@ -175,6 +184,7 @@ class DailyReportEditFragment : BaseFragment() {
             val number = add4_number_editText.text.toString().toInt()
             val ps = add4_ps_editText.text.toString()
             val dailyReport = newDailyReport.copy(
+                carId = carId,
                 date = date,
                 meter = meter,
                 number = number,
@@ -193,7 +203,7 @@ class DailyReportEditFragment : BaseFragment() {
     }
 
     private fun addDailyReport(dailyReport: DailyReport) {
-        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.id)
+        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
             .collection(DailyReport.DIR_NAME).document()
         val addDailyReport = dailyReport.copy(id = ref.id)
         ref.set(addDailyReport)
@@ -205,7 +215,7 @@ class DailyReportEditFragment : BaseFragment() {
     }
 
     private fun setDailyReport(dailyReport: DailyReport) {
-        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.id)
+        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
             .collection(DailyReport.DIR_NAME)
             .document(dailyReport.id ?: return)
             .set(dailyReport)
@@ -221,13 +231,23 @@ class DailyReportEditFragment : BaseFragment() {
             .document(dailyReport.id ?: return)
             .set(dailyReport)
             .addOnSuccessListener {
-                parentFragmentManager.popBackStack(null, 1) }
+                parentFragmentManager.popBackStack(null, 1)
+            }
             .addOnFailureListener { Log.w(TAG, "Error addDailyReport", it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.setGroupVisible(0, false)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val newCarId = data?.getStringExtra("carId")
+            carId = newCarId.toString()
+            add4_carId_textView.text = carId
+        }
     }
 
     companion object {

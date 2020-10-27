@@ -20,3 +20,7 @@ fun Calendar.setMountStarTime(): Calendar{
         set(Calendar.MILLISECOND, 0)
     }
 }
+fun Date.getTomorrowDate(): Date {
+    val tomorrowTimeMills = this.time + 24 * 60 * 60 * 1000
+    return Date(tomorrowTimeMills)
+}

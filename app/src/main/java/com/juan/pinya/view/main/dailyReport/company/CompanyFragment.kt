@@ -39,7 +39,7 @@ class CompanyFragment : BaseFragment(), CompanyClickListener {
         val id = arguments?.getString(DAILY_REPORT_KEY)
         newDailyReport = newDailyReport.copy(
             id = id,
-            userId = sharedPreferencesManager.id,
+            userId = sharedPreferencesManager.stuffId,
             userName = sharedPreferencesManager.name,
             carId = sharedPreferencesManager.carId)
     }

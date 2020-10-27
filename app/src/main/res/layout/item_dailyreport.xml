@@ -4,12 +4,131 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp">
+    android:layout_marginBottom="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/pinya_yellow1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/pinya_yellow1">
+
+        <TextView
+            android:id="@+id/company_textView"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow3"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:padding="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="廠商廠商" />
+
+        <TextView
+            android:id="@+id/site_textView"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow2"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:gravity="center"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/company_textView"
+            app:layout_constraintStart_toEndOf="@+id/company_textView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="工地工地" />
+
+        <TextView
+            android:id="@+id/price_textView"
+            android:layout_width="60dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow3"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/site_textView"
+            app:layout_constraintStart_toEndOf="@+id/site_textView"
+            app:layout_constraintTop_toTopOf="@+id/site_textView"
+            tools:text="1200元" />
+
+        <TextView
+            android:id="@+id/itemDate_textView"
+            android:layout_width="60dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow2"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/price_textView"
+            app:layout_constraintStart_toEndOf="@+id/price_textView"
+            app:layout_constraintTop_toTopOf="@+id/price_textView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="12:00" />
+
+        <TextView
+            android:id="@+id/ps_textView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="5"
+            android:minWidth="50dp"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/itemDate_textView"
+            app:layout_constraintTop_toTopOf="@+id/itemDate_textView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="備註" />
+
+        <TextView
+            android:id="@+id/address_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:maxLines="4"
+            android:padding="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/site_textView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/company_textView"
+            app:layout_constraintTop_toBottomOf="@+id/company_textView"
+            tools:text="地點" />
+
+        <TextView
+            android:id="@+id/numder_textView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:background="@color/pinya_yellow2"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="2dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
+            app:layout_constraintEnd_toEndOf="@+id/price_textView"
+            app:layout_constraintStart_toStartOf="@+id/price_textView"
+            app:layout_constraintTop_toTopOf="@+id/address_textView"
+            tools:text="no.123" />
 
         <TextView
             android:id="@+id/meter_textView"
@@ -22,113 +141,9 @@
             app:layout_constraintEnd_toEndOf="@+id/itemDate_textView"
             app:layout_constraintStart_toStartOf="@+id/itemDate_textView"
             app:layout_constraintTop_toTopOf="@+id/numder_textView"
-            tools:text="米數" />
+            tools:text="10米" />
 
-        <TextView
-            android:id="@+id/numder_textView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/pinya_yellow2"
-            android:gravity="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
-            app:layout_constraintEnd_toEndOf="@+id/price_textView"
-            app:layout_constraintStart_toStartOf="@+id/price_textView"
-            app:layout_constraintTop_toTopOf="@+id/address_textView"
-            tools:text="車次" />
 
-        <TextView
-            android:id="@+id/address_textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow1"
-            android:gravity="center"
-            android:lines="2"
-            android:minHeight="50dp"
-            android:padding="2dp"
-            app:layout_constraintEnd_toEndOf="@+id/site_textView"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/company_textView"
-            app:layout_constraintTop_toBottomOf="@+id/company_textView"
-            tools:text="地點" />
-
-        <TextView
-            android:id="@+id/company_textView"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow3"
-            android:gravity="center"
-            android:lines="1"
-            android:minHeight="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="廠商" />
-
-        <TextView
-            android:id="@+id/site_textView"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow2"
-            android:gravity="center"
-            android:lines="1"
-            android:padding="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/company_textView"
-            app:layout_constraintStart_toEndOf="@+id/company_textView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="工地" />
-
-        <TextView
-            android:id="@+id/itemDate_textView"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow2"
-            android:gravity="center"
-            android:lines="1"
-            app:layout_constraintBottom_toBottomOf="@+id/price_textView"
-            app:layout_constraintStart_toEndOf="@+id/price_textView"
-            app:layout_constraintTop_toTopOf="@+id/price_textView"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="時間" />
-
-        <TextView
-            android:id="@+id/price_textView"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow3"
-            android:gravity="center"
-            android:lines="1"
-            app:layout_constraintBottom_toBottomOf="@+id/site_textView"
-            app:layout_constraintStart_toEndOf="@+id/site_textView"
-            app:layout_constraintTop_toTopOf="@+id/site_textView"
-            tools:text="單價" />
-
-        <TextView
-            android:id="@+id/ps_textView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/pinya_yellow1"
-            android:gravity="center"
-            android:maxLines="5"
-            android:ellipsize="end"
-            android:minWidth="50dp"
-            android:padding="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/address_textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/itemDate_textView"
-            app:layout_constraintTop_toTopOf="@+id/itemDate_textView"
-            tools:text="備註" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

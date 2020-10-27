@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 
 class SharedPreferencesManager(private val sharedPreferences: SharedPreferences) {
 
-    var id: String
-        get() = getValue(ID_KEY, "")
-        set(value) = setValue(ID_KEY, value)
+    var stuffId: String
+        get() = getValue(STUFF_ID_KEY, "")
+        set(value) = setValue(STUFF_ID_KEY, value)
 
     var password: String
         get() = getValue(PASSWORD_KEY, "")
@@ -57,7 +57,7 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
     }
 
     companion object {
-        private const val ID_KEY = "id"
+        private const val STUFF_ID_KEY = "stuffId"
         private const val PASSWORD_KEY = "password"
         private const val NAME_KEY = "name"
         private const val IS_FIRST_LOGIN_KEY = "isFirstLogin"

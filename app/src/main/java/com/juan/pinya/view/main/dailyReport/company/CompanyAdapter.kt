@@ -19,7 +19,7 @@ class CompanyAdapter(options: FirestoreRecyclerOptions<Company>,
 
     class DRAdd1ViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val companyTextView = itemView.add_company_textView
+        val companyTextView = itemView.add_item_textView
 
     }
 

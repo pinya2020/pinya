@@ -79,7 +79,7 @@ class AddressFragment: BaseFragment(), AddressClickListener {
         newDailyReport = newDailyReport.copy(
             address = address.address,
             addressId = address.addressId,
-            price = address.price
+            price = address.cost
             )
     }
 

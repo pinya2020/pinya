@@ -31,6 +31,7 @@ class StatisticsFragment : Fragment() {
             val intent = Intent()
             intent.setClass(requireContext(),LoginActivity::class.java)
             sharedPreferencesManager.isFirstLogin = true
+            sharedPreferencesManager.carId = ""
             startActivity(intent)
         }
     }

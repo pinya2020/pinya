@@ -20,9 +20,10 @@
 
     <TextView
         android:id="@+id/userName_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView11"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2"
         tools:text="@string/tools_userName" />
@@ -38,7 +39,7 @@
 
     <TextView
         android:id="@+id/month_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:textSize="20sp"

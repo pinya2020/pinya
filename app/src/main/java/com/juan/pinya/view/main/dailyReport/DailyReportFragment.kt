@@ -3,6 +3,7 @@ package com.juan.pinya.view.main.dailyReport
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -77,7 +78,7 @@ class DailyReportFragment : BaseFragment() {
         setUpRv()
 
         carId_imageButtom.setOnClickListener {
-            showCarIdDialog()
+            showCarIdDialog(false)
         }
 
         data_imageButton.setOnClickListener {
@@ -94,12 +95,12 @@ class DailyReportFragment : BaseFragment() {
             AlertDialog.Builder(this.context)
                 .setView(alertDialogItem)
                 .setPositiveButton(R.string.text_enter, null)
-                .setNegativeButton(R.string.text_change) { _, _ -> showCarIdDialog() }
+                .setNegativeButton(R.string.text_change) { _, _ -> showCarIdDialog(false) }
                 .setCancelable(false)
                 .show()
             alertDialogItem.carId_alertDialog_textView.text = carId
         } else {
-            showCarIdDialog()
+            showCarIdDialog(false)
         }
     }
 
@@ -118,22 +119,23 @@ class DailyReportFragment : BaseFragment() {
                         0,
                         ContextCompat.getColor(requireContext(),
                             R.color.background_delete_button)) {
-                        //禁用所有佈局控制
-                        dailyreport_recylerView.suppressLayout(true)
+                        //禁用所有recycelview控制
+//                        dailyreport_recylerView.suppressLayout(true)
+                        val dialog = showDeleteDialog()
                         db.collection(Stuff.DIR_NAME)
                             .document(sharedPreferencesManager.stuffId)
                             .collection(DailyReport.DIR_NAME)
                             .document(dailyReport.id ?: return@DeleteButton)
                             .delete()
                             .addOnSuccessListener {
-                                deleteAdminDailyReport(dailyReport)
-                                dailyreport_recylerView.suppressLayout(false)
+                                deleteAdminDailyReport(dailyReport, dialog)
                             }
                             .addOnFailureListener {
+                                dialog.dismiss()
                                 Toast.makeText(context,
                                     getString(R.string.text_delete_fail),
                                     Toast.LENGTH_SHORT).show()
-                                dailyreport_recylerView.suppressLayout(false)
+//                                dailyreport_recylerView.suppressLayout(false)
 
                             }
                     })
@@ -141,17 +143,23 @@ class DailyReportFragment : BaseFragment() {
             }
     }
 
-    private fun deleteAdminDailyReport(dailyReport: DailyReport) {
+    private fun deleteAdminDailyReport(dailyReport: DailyReport, dialog: Dialog) {
         db.collection(DailyReport.DIR_NAME)
             .document(dailyReport.id ?: return)
             .delete()
             .addOnSuccessListener {
+                dialog.dismiss()
+//                dailyreport_recylerView.suppressLayout(false)
                 Toast.makeText(context,
                     getString(R.string.text_delete_success),
                     Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(context, getString(R.string.text_delete_admin_fail), Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+//                dailyreport_recylerView.suppressLayout(false)
+                Toast.makeText(context,
+                    getString(R.string.text_delete_admin_fail),
+                    Toast.LENGTH_SHORT).show()
             }
     }
 

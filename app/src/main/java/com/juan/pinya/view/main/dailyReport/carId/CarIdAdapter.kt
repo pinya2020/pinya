@@ -18,7 +18,7 @@ class CarIdAdapter(options: FirestoreRecyclerOptions<Car>,
 
     class CarIdViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val carIdTextView = itemView.add_company_textView
+        val carIdTextView = itemView.add_item_textView
 
         fun onBind(car: Car) {
 

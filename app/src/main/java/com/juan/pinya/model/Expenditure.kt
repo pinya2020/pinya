@@ -15,6 +15,9 @@ data class Expenditure(
     @SerializedName("userId")
     val userId: String = "",
 
+    @SerializedName("userName")
+    val userName: String = "",
+
     @SerializedName("price")
     val price: Int = Int.MIN_VALUE,
 

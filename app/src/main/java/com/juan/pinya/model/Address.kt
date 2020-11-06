@@ -10,14 +10,15 @@ data class Address(
     @SerializedName("addressId")
     val addressId: String = "",
 
-    @SerializedName("address")
+    @SerializedName(ADDRESS_KET)
     val address: String = "",
 
     @SerializedName("price")
-    val price: Int = Int.MIN_VALUE
+    val cost: Int = Int.MIN_VALUE
 ) : Parcelable {
 
     companion object {
         const val DIR_NAME = "地點"
+        const val ADDRESS_KET = "address"
     }
 }

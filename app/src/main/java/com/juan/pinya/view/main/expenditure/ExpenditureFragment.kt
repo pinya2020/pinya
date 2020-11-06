@@ -1,6 +1,7 @@
 package com.juan.pinya.view.main.expenditure
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
@@ -20,16 +21,16 @@ import com.juan.pinya.extention.setMountStarTime
 import com.juan.pinya.model.Expenditure
 import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
+import com.juan.pinya.module.dailyReport.BaseFragment
 import com.juan.pinya.module.swipe.DeleteButton
 import com.juan.pinya.module.swipe.ExpenditureSwipeHelper
-import kotlinx.android.synthetic.main.fragment_dailyreport.*
 import kotlinx.android.synthetic.main.fragment_expenditure.*
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ExpenditureFragment : Fragment() {
+class ExpenditureFragment : BaseFragment() {
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
     private val calendar = Calendar.getInstance().setMountStarTime()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -43,8 +44,6 @@ class ExpenditureFragment : Fragment() {
             }
         }
     }
-    private lateinit var newExpenditure: Expenditure
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,37 +115,38 @@ class ExpenditureFragment : Fragment() {
                     100,
                     0,
                     ContextCompat.getColor(requireContext(), R.color.background_delete_button)) {
-                    expenditure_recylerView.suppressLayout(true)
+                    val dialog = showDeleteDialog()
                     db.collection(Stuff.DIR_NAME)
                         .document(sharedPreferencesManager.stuffId)
                         .collection(Expenditure.DIR_NAME)
                         .document(expenditure.id ?: return@DeleteButton)
                         .delete()
                         .addOnSuccessListener {
-                            deleteAdminExpenditure(expenditure)
-                            expenditure_recylerView.suppressLayout(false)
+                            deleteAdminExpenditure(expenditure, dialog)
                         }
                         .addOnFailureListener {
+                            dialog.dismiss()
                             Toast.makeText(context,
                                 R.string.text_delete_fail,
                                 Toast.LENGTH_SHORT).show()
-                            expenditure_recylerView.suppressLayout(false)
                         }
                 })
             }
         }
     }
 
-    private fun deleteAdminExpenditure(expenditure: Expenditure) {
+    private fun deleteAdminExpenditure(expenditure: Expenditure, dialog: Dialog) {
         db.collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .delete()
             .addOnSuccessListener {
+                dialog.dismiss()
                 Toast.makeText(context,
                     R.string.text_delete_success,
                     Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
+                dialog.dismiss()
                 Toast.makeText(context,
                     R.string.text_delete_admin_fail,
                     Toast.LENGTH_SHORT).show()

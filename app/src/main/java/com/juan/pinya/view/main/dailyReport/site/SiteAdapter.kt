@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.juan.pinya.R
-import com.juan.pinya.model.DailyReport
 import com.juan.pinya.model.Site
 import kotlinx.android.synthetic.main.item_addlist.view.*
 
@@ -20,7 +19,7 @@ class SiteAdapter(options: FirestoreRecyclerOptions<Site>,
 
     class DRAdd2ViewHoder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var siteTextView = itemView.add_company_textView
+        var siteTextView = itemView.add_item_textView
 
     }
 

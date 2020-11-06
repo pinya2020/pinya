@@ -6,27 +6,34 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Car(
-
-    @SerializedName("carId")
-    val carId: String? = null,
-
-    @SerializedName("deadline")
-    val deadline: Int? = null,
-
     @SerializedName("id")
-    val id: String? = null,
+    val id: String = "",
+
+    @SerializedName(CAR_ID_KEY)
+    val carId: String = "",
+
+    @SerializedName("personInCharge")
+    val personInCharge: String = "",
+
+    @SerializedName("loanMonths")
+    val loanMonths: Int = Int.MIN_VALUE,
 
     @SerializedName("loan")
-    val loan: Int? = null,
+    val loan: Int = Int.MIN_VALUE,
 
-    @SerializedName("nowDeadline")
-    val nowDeadline: Int? = null,
+    @SerializedName("loanPayment")
+    val loanPayment: Int = Int.MIN_VALUE,
 
-    @SerializedName("payType")
-    var payType: Int? = null
+    @SerializedName("paymentDate")
+    val paymentDate: Int = Int.MIN_VALUE,
+
+    @SerializedName("violation")
+    var violation: Int = Int.MIN_VALUE
 
 ) : Parcelable {
+
     companion object {
         const val DIR_NAME = "車輛"
+        const val CAR_ID_KEY = "carId"
     }
 }

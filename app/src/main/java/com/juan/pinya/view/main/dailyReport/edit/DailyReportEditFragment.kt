@@ -44,7 +44,6 @@ class DailyReportEditFragment : BaseFragment() {
         .set(Calendar.MINUTE, nowMinute)
         .build()
     private var date = Timestamp(calendar.time)
-    private var carId = ""
     override var bottomNavigationViewVisibility = View.GONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,10 +68,11 @@ class DailyReportEditFragment : BaseFragment() {
         } else {
             add4_textView.text = getString(R.string.text_add_dailyreport)
         }
-        carId = newDailyReport.carId
-        add4_carId_textView.text = carId
+
+        add4_carId_textView.text = newDailyReport.carId
         add4_carId_imageButton.setOnClickListener {
-            showCarIdDialog()
+            add4_carId_textView.error = null
+            showCarIdDialog(false)
         }
         add4_company_textView.text = newDailyReport.company
         add4_site_textView.text = newDailyReport.site
@@ -168,6 +168,17 @@ class DailyReportEditFragment : BaseFragment() {
         }
 
         add4_finish_button.setOnClickListener {
+            if (add4_carId_textView.text.isEmpty()) {
+                add4_carId_textView.error = "請選擇車號"
+                if (add4_meter_editText.text.isEmpty()) {
+                    add4_meter_editText.error = "請輸入米數"
+                    if (add4_number_editText.text.isEmpty()) {
+                        add4_number_editText.error = "請輸入車次"
+                    }
+                }
+                return@setOnClickListener
+            }
+            val carId = add4_carId_textView.text.toString()
 
             if (add4_meter_editText.text.isEmpty()) {
                 add4_meter_editText.error = "請輸入米數"
@@ -190,6 +201,7 @@ class DailyReportEditFragment : BaseFragment() {
                 number = number,
                 ps = ps
             )
+            add4_finish_button.isEnabled = false
             if (newDailyReport.id == null) {
                 addDailyReport(dailyReport)
             } else {
@@ -245,8 +257,7 @@ class DailyReportEditFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val newCarId = data?.getStringExtra("carId")
-            carId = newCarId.toString()
-            add4_carId_textView.text = carId
+            add4_carId_textView.text = newCarId
         }
     }
 

@@ -8,7 +8,6 @@ import java.util.*
 
 @Parcelize
 data class DailyReport(
-
     @SerializedName("id")
     val id: String? = null,
 
@@ -27,10 +26,10 @@ data class DailyReport(
     @SerializedName("meter")
     val meter: Int = Int.MIN_VALUE,
 
-    @SerializedName("userName")
+    @SerializedName(USER_NAME_KEY)
     val userName: String = "",
 
-    @SerializedName("userId")
+    @SerializedName(USER_ID_KEY)
     val userId: String = "",
 
 
@@ -59,5 +58,8 @@ data class DailyReport(
     companion object {
         const val DIR_NAME = "日報表"
         const val DATE_KEY = "date"
+        const val USER_NAME_KEY = "userName"
+        const val USER_ID_KEY = "userId"
     }
 }
+

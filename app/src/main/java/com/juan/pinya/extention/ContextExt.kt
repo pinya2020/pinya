@@ -39,7 +39,7 @@ fun Context.showAlertDialog(
 
 fun Context.showLoadingDialog():AlertDialog {
     val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
-    val mBuilder = AlertDialog.Builder(this)
+    val mBuilder = AlertDialog.Builder(this,R.style.DeleteDialog)
         .setView(mDialogView)
         .setCancelable(false)
     val mAlertDialog = mBuilder.show()

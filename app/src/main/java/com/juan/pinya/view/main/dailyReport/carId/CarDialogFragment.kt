@@ -30,8 +30,14 @@ class CarDialogFragment : DialogFragment(), CarDialogClickListener {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val carAdapter: CarIdAdapter by lazy {
         val dailyReportRef: CollectionReference =
-            db.collection("車輛")
-        val query: Query = dailyReportRef
+            db.collection(Car.DIR_NAME)
+        val showAll = arguments?.getBoolean("showAll")
+        val query: Query
+        if (showAll!!){
+            query = dailyReportRef
+        }else{
+            query = dailyReportRef.whereNotEqualTo("carId","ALL")
+        }
         val options = FirestoreRecyclerOptions.Builder<Car>()
             .setQuery(query, Car::class.java)
             .build()

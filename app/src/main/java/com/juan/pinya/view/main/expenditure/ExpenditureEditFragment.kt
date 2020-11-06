@@ -96,7 +96,7 @@ class ExpenditureEditFragment : BaseFragment() {
 
         type_imageButton.setOnClickListener { showTypeDialog() }
 
-        carId_imageButton.setOnClickListener { showCarIdDialog() }
+        carId_imageButton.setOnClickListener { showCarIdDialog(false) }
 
         date_imageButton.setOnClickListener { showDatePickerDialog() }
 
@@ -112,6 +112,7 @@ class ExpenditureEditFragment : BaseFragment() {
             val ps = ps_editText.text.trim().toString()
             val expenditure = newExpenditure.copy(
                 userId = sharedPreferencesManager.stuffId,
+                userName = sharedPreferencesManager.name,
                 type = type,
                 date = date,
                 carId = carId,

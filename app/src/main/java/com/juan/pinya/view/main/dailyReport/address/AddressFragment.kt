@@ -10,7 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.juan.pinya.R
 import com.juan.pinya.model.Address
+import com.juan.pinya.model.Company
 import com.juan.pinya.model.DailyReport
+import com.juan.pinya.model.Site
 import com.juan.pinya.module.dailyReport.AddressClickListener
 import com.juan.pinya.module.dailyReport.BaseFragment
 import com.juan.pinya.view.main.dailyReport.edit.DailyReportEditFragment
@@ -50,7 +52,7 @@ class AddressFragment: BaseFragment(), AddressClickListener {
                 showFragment(newDailyReport)
             }else{
                 add3_textView.setTextColor(ContextCompat.getColor(requireContext(),
-                    R.color.background_delete_button))
+                    R.color.delete))
             }
 
         }
@@ -59,9 +61,9 @@ class AddressFragment: BaseFragment(), AddressClickListener {
     private fun setUpRv(companyId: String, siteId: String) {
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dailyReportRef: CollectionReference =
-            db.collection("廠商").document(companyId)
-                .collection("工地").document(siteId)
-                .collection("地點")
+            db.collection(Company.DIR_NAME).document(companyId)
+                .collection(Site.DIR_NAME).document(siteId)
+                .collection(Address.DIR_NAME)
 
         val query: Query = dailyReportRef
         val options = FirestoreRecyclerOptions.Builder<Address>()

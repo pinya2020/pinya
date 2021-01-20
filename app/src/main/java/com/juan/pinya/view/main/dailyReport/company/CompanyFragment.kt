@@ -23,8 +23,8 @@ class CompanyFragment : BaseFragment(), CompanyClickListener {
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
     private val adapter: CompanyAdapter by lazy {
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dailyReportRef: CollectionReference = db.collection("廠商")
-        val query: Query = dailyReportRef
+        val dailyReportRef: CollectionReference = db.collection(Company.DIR_NAME)
+        val query: Query = dailyReportRef.orderBy("company")
         val options = FirestoreRecyclerOptions.Builder<Company>()
             .setQuery(query, Company::class.java)
             .build()
@@ -64,7 +64,7 @@ class CompanyFragment : BaseFragment(), CompanyClickListener {
                 showFragment(newDailyReport)
             } else {
                 add1_textView.setTextColor(ContextCompat.getColor(requireContext(),
-                    R.color.background_delete_button))
+                    R.color.delete))
             }
         }
     }

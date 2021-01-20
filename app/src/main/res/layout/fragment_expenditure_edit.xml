@@ -50,8 +50,8 @@
 
         <ImageButton
             android:id="@+id/type_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_baseline_arrow_drop_down_24"
             app:layout_constraintBottom_toBottomOf="@+id/type_textView"
@@ -80,8 +80,8 @@
 
         <ImageButton
             android:id="@+id/carId_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_baseline_arrow_drop_down_24"
             app:layout_constraintBottom_toBottomOf="@+id/carId_textView"
@@ -113,8 +113,8 @@
 
         <ImageButton
             android:id="@+id/date_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_baseline_arrow_drop_down_24"
             app:layout_constraintBottom_toBottomOf="@+id/date_textView"
@@ -192,6 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginBottom="20dp"
                 android:text="@string/text_cancel" />
 
             <Button

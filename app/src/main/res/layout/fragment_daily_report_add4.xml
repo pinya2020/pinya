@@ -13,7 +13,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-
         <TextView
             android:id="@+id/add4_textView"
             android:layout_width="wrap_content"
@@ -50,8 +49,8 @@
 
         <ImageButton
             android:id="@+id/add4_carId_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_baseline_arrow_drop_down_24"
             app:layout_constraintBottom_toBottomOf="@+id/add4_carId_textView"
@@ -62,7 +61,7 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="@string/text_company1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView1"
@@ -86,7 +85,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="@string/text_site1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView3"
@@ -108,7 +107,7 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="@string/text_address1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -132,7 +131,7 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:text="@string/text_cost1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView5"
@@ -152,7 +151,7 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="@string/text_time1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView6"
@@ -171,8 +170,8 @@
 
         <ImageButton
             android:id="@+id/data_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_baseline_arrow_drop_down_24"
             app:layout_constraintBottom_toBottomOf="@+id/add4_date_textView"
@@ -183,21 +182,48 @@
             android:id="@+id/add4_time_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text=":"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/hour_editTextNumber"
+            app:layout_constraintStart_toEndOf="@+id/hour_editTextNumber"
+            app:layout_constraintTop_toTopOf="@+id/hour_editTextNumber" />
+
+        <EditText
+            android:id="@+id/hour_editTextNumber"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="20sp"
+            android:gravity="center"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="2"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
             app:layout_constraintStart_toStartOf="@+id/add4_date_textView"
-            app:layout_constraintTop_toBottomOf="@+id/add4_date_textView"
-            tools:text="3:20" />
+            app:layout_constraintTop_toBottomOf="@+id/data_imageButton"
+            tools:text="12" />
+
+        <EditText
+            android:id="@+id/minute_editTextNumber"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:maxLength="2"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/add4_time_textView"
+            app:layout_constraintTop_toTopOf="@+id/hour_editTextNumber"
+            tools:text="12"/>
 
         <ImageButton
             android:id="@+id/time_imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_marginStart="5dp"
-            android:src="@drawable/ic_baseline_arrow_drop_down_24"
-            app:layout_constraintBottom_toBottomOf="@+id/add4_time_textView"
-            app:layout_constraintStart_toEndOf="@+id/add4_time_textView"
-            app:layout_constraintTop_toTopOf="@+id/add4_time_textView" />
+            android:background="@color/no_color"
+            android:src="@drawable/ic_baseline_access_time_24"
+            app:layout_constraintBottom_toBottomOf="@+id/minute_editTextNumber"
+            app:layout_constraintStart_toEndOf="@+id/minute_editTextNumber"
+            app:layout_constraintTop_toTopOf="@+id/minute_editTextNumber" />
 
         <TextView
             android:id="@+id/textView7"
@@ -207,7 +233,7 @@
             android:text="@string/text_meter1"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textView8"
-            app:layout_constraintTop_toBottomOf="@+id/add4_time_textView" />
+            app:layout_constraintTop_toBottomOf="@+id/hour_editTextNumber" />
 
         <EditText
             android:id="@+id/add4_meter_editText"
@@ -267,33 +293,33 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toBottomOf="@+id/add4_number_editText"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="123456789012345678901234567890123456789012345678901234567890" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add4_ps_editText">
 
             <Button
                 android:id="@+id/add4_cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 android:text="@string/text_cancel" />
 
@@ -305,6 +331,8 @@
                 android:text="@string/text_finishes" />
 
         </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

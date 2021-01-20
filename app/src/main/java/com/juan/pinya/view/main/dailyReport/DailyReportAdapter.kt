@@ -9,8 +9,9 @@ import com.juan.pinya.model.DailyReport
 
 class DailyReportAdapter(
     options: FirestoreRecyclerOptions<DailyReport>,
+    private var statistics: Boolean,
     private val listener: (DailyReport) -> Unit
-    ) :
+) :
     FirestoreRecyclerAdapter<DailyReport, DailyReportViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyReportViewHolder {
@@ -19,12 +20,11 @@ class DailyReportAdapter(
         return DailyReportViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(
         holder: DailyReportViewHolder,
         position: Int,
         dailyReport: DailyReport
     ) {
-        holder.onBind(dailyReport, listener)
+        holder.onBind(dailyReport, listener, statistics)
     }
 }

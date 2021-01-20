@@ -14,7 +14,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/text_driver1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +22,7 @@
         android:id="@+id/userName_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/textView11"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2"
@@ -33,16 +33,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_month1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/month_textView"
         app:layout_constraintTop_toTopOf="@+id/userName_textView" />
 
     <TextView
         android:id="@+id/month_textView"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/mount_imageButtom"
         app:layout_constraintTop_toTopOf="@+id/textView11"
         tools:text="2020/09" />
@@ -65,48 +65,61 @@
         android:stretchColumns="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userName_textView">
+        app:layout_constraintTop_toBottomOf="@+id/mount_imageButtom">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/textView12"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="20"
+                android:autoSizeTextType="uniform"
                 android:background="@color/pinya_green1"
                 android:gravity="center"
+                android:padding="2dp"
                 android:text="@string/text_type"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/textView13"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:autoSizeTextType="uniform"
                 android:background="@color/pinya_green3"
                 android:gravity="center"
+                android:padding="2dp"
                 android:text="@string/text_carId"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/textView14"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:autoSizeTextType="uniform"
                 android:background="@color/pinya_green1"
                 android:gravity="center"
+                android:padding="2dp"
                 android:text="@string/text_date"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
 
             <TextView
                 android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:autoSizeTextType="uniform"
                 android:background="@color/pinya_green3"
                 android:gravity="center"
+                android:padding="2dp"
                 android:text="@string/text_price"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
         </TableRow>
     </TableLayout>
@@ -115,6 +128,7 @@
         android:id="@+id/expenditure_recylerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

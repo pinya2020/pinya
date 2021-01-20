@@ -3,21 +3,23 @@ package com.juan.pinya.view.main.dailyReport
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.juan.pinya.R
 import com.juan.pinya.di.SHARED_PREFERENCES_NAME
 import com.juan.pinya.extention.setTodayStartTime
+import com.juan.pinya.model.Car
 import com.juan.pinya.model.DailyReport
 import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
@@ -35,12 +37,14 @@ import java.util.*
 
 
 class DailyReportFragment : BaseFragment() {
+    private val TAG = "DailyReportFragment"
+    private lateinit var pointSnapshot : ListenerRegistration
     private val dailyReportViewModel by viewModel<DailyReportViewModel>()
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
     private val calendar = Calendar.getInstance().setTodayStartTime()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val adapter: DailyReportAdapter by lazy {
-        DailyReportAdapter(dailyReportViewModel.getDailyReportQuery(calendar.time)) { dailyReport ->
+        DailyReportAdapter(dailyReportViewModel.getDailyReportQuery(calendar.time),false) { dailyReport ->
             val fragment = DailyReportEditFragment.newInstance(dailyReport)
             parentFragmentManager.beginTransaction().apply {
                 replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
@@ -75,7 +79,9 @@ class DailyReportFragment : BaseFragment() {
         userName_TextView.text = userName
         carId_TextView.text = sharedPreferencesManager.carId
         date_textView.text = simpleDateFormat.format(calendar.time)
+        getViolation()
         setUpRv()
+
 
         carId_imageButtom.setOnClickListener {
             showCarIdDialog(false)
@@ -84,6 +90,61 @@ class DailyReportFragment : BaseFragment() {
         data_imageButton.setOnClickListener {
             showDatePickerDialog(date_textView)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        addSnapshot()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        pointSnapshot.remove()
+        adapter.stopListening()
+        super.onStop()
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.add_menu, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.add_action -> {
+                showFragment(CompanyFragment.newInstance())
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun addSnapshot(){
+        val query = db.collection(Car.DIR_NAME)
+        pointSnapshot = query.addSnapshotListener { value, error ->
+            if (error != null){
+                return@addSnapshotListener
+            }
+            if (value != null){
+                getViolation()
+            }else{
+                Log.e(TAG, "onEvent:null")
+            }
+        }
+    }
+
+    private fun getViolation() {
+        val ref = db.collection(Car.DIR_NAME)
+            .whereEqualTo(Car.CAR_ID_KEY, sharedPreferencesManager.carId)
+        val q = ref.get()
+            .addOnSuccessListener {
+                if (it.count() == 1) {
+                    val carList = it.toObjects(Car::class.java)
+                    val violationPoint = carList[0].violation
+                    violation_textView.text = violationPoint.toString()
+                }
+            }
     }
 
     private fun showCarId() {
@@ -118,74 +179,58 @@ class DailyReportFragment : BaseFragment() {
                         100,
                         0,
                         ContextCompat.getColor(requireContext(),
-                            R.color.background_delete_button)) {
+                            R.color.delete)) {
+                        val dialog = showDeleteDialog()
+                        Handler().postDelayed({ dialog.dismiss() }, 300)
                         //禁用所有recycelview控制
 //                        dailyreport_recylerView.suppressLayout(true)
-                        val dialog = showDeleteDialog()
-                        db.collection(Stuff.DIR_NAME)
-                            .document(sharedPreferencesManager.stuffId)
-                            .collection(DailyReport.DIR_NAME)
-                            .document(dailyReport.id ?: return@DeleteButton)
-                            .delete()
-                            .addOnSuccessListener {
-                                deleteAdminDailyReport(dailyReport, dialog)
-                            }
-                            .addOnFailureListener {
-                                dialog.dismiss()
-                                Toast.makeText(context,
-                                    getString(R.string.text_delete_fail),
-                                    Toast.LENGTH_SHORT).show()
-//                                dailyreport_recylerView.suppressLayout(false)
-
-                            }
+                        if (isOnline(requireContext())) {
+                            deleteDailyReport(dailyReport)
+                            deleteAdminDailyReport(dailyReport)
+                        } else {
+                            Toast.makeText(requireContext(),
+                                getString(R.string.text_please_check_internet),
+                                Toast.LENGTH_SHORT).show()
+                        }
                     })
                 }
             }
     }
 
-    private fun deleteAdminDailyReport(dailyReport: DailyReport, dialog: Dialog) {
+    private fun deleteDailyReport(dailyReport: DailyReport) {
+        db.collection(Stuff.DIR_NAME)
+            .document(dailyReport.userId)
+            .collection(DailyReport.DIR_NAME)
+            .document(dailyReport.id ?: return)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DailyReport 刪除成功")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "DailyReport 刪除失敗")
+            }
+    }
+
+    private fun deleteAdminDailyReport(dailyReport: DailyReport) {
         db.collection(DailyReport.DIR_NAME)
             .document(dailyReport.id ?: return)
             .delete()
             .addOnSuccessListener {
-                dialog.dismiss()
-//                dailyreport_recylerView.suppressLayout(false)
-                Toast.makeText(context,
+                Log.d(TAG, "AdminDailyReport 刪除成功")
+                Toast.makeText(
+                    context,
                     getString(R.string.text_delete_success),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener {
-                dialog.dismiss()
-//                dailyreport_recylerView.suppressLayout(false)
-                Toast.makeText(context,
-                    getString(R.string.text_delete_admin_fail),
-                    Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "AdminDailyReport 刪除失敗")
+                Toast.makeText(
+                    context,
+                    getString(R.string.text_delete_fail),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        adapter.startListening()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adapter.stopListening()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.add_menu, menu)
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.add_action -> {
-                showFragment(CompanyFragment.newInstance())
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun showFragment(fragment: Fragment) {
@@ -220,6 +265,7 @@ class DailyReportFragment : BaseFragment() {
             val carId = data?.getStringExtra("carId")
             sharedPreferencesManager.carId = carId as String
             carId_TextView.text = carId
+            getViolation()
         }
     }
 

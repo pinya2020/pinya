@@ -14,7 +14,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/text_driver1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +22,7 @@
         android:id="@+id/userName_TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/textView7"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="@+id/textView5"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_carId1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/carId_TextView"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
 
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/carId_imageButtom"
         app:layout_constraintTop_toTopOf="@+id/textView5"
         tools:text="@string/tools_carId" />
@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="110dp"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toTopOf="@+id/textView9"
         tools:text="@string/tools_date" />
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/text_date1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/userName_TextView" />
 
@@ -83,17 +83,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="@string/text_violation1"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/data_imageButton"
         app:layout_constraintTop_toTopOf="@+id/textView9" />
 
     <TextView
-        android:id="@+id/violat_textView"
+        android:id="@+id/violation_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#F44336"
         android:textColorHint="#F44336"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toTopOf="@+id/textView9"
         tools:text="9" />
@@ -122,23 +122,29 @@
             android:id="@+id/meter_textView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
             android:background="@color/pinya_green2"
             android:gravity="center"
+            android:padding="2dp"
             android:text="@string/text_meter"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/numder_textView"
-            app:layout_constraintEnd_toEndOf="@+id/itemDate_textView"
-            app:layout_constraintStart_toStartOf="@+id/itemDate_textView"
+            app:layout_constraintEnd_toEndOf="@+id/time_textView"
+            app:layout_constraintStart_toStartOf="@+id/time_textView"
             app:layout_constraintTop_toTopOf="@+id/numder_textView" />
 
         <TextView
             android:id="@+id/numder_textView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
             android:background="@color/pinya_green3"
             android:gravity="center"
+            android:padding="2dp"
             android:text="@string/text_number"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/address_textView"
             app:layout_constraintEnd_toEndOf="@+id/price_textView"
             app:layout_constraintStart_toStartOf="@+id/price_textView"
@@ -148,7 +154,7 @@
             android:id="@+id/address_textView"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green2"
             android:gravity="center"
@@ -156,22 +162,25 @@
             android:minHeight="50dp"
             android:padding="2dp"
             android:text="@string/text_address"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="@+id/site_textView"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/company_textView"
-            app:layout_constraintTop_toBottomOf="@+id/company_textView" />
+            app:layout_constraintStart_toStartOf="@+id/data_textView"
+            app:layout_constraintTop_toBottomOf="@+id/data_textView" />
 
         <TextView
-            android:id="@+id/company_textView"
+            android:id="@+id/data_textView"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green1"
             android:gravity="center"
             android:lines="1"
             android:minHeight="50dp"
+            android:padding="2dp"
             android:text="@string/text_company"
+            android:textSize="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -179,27 +188,30 @@
             android:id="@+id/site_textView"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green3"
             android:gravity="center"
             android:lines="1"
             android:padding="2dp"
             android:text="@string/text_site"
-            app:layout_constraintBottom_toBottomOf="@+id/company_textView"
-            app:layout_constraintStart_toEndOf="@+id/company_textView"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/data_textView"
+            app:layout_constraintStart_toEndOf="@+id/data_textView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/itemDate_textView"
+            android:id="@+id/time_textView"
             android:layout_width="60dp"
             android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green3"
             android:gravity="center"
             android:lines="1"
+            android:padding="2dp"
             android:text="@string/text_time"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/price_textView"
             app:layout_constraintStart_toEndOf="@+id/price_textView"
             app:layout_constraintTop_toTopOf="@+id/price_textView" />
@@ -208,12 +220,14 @@
             android:id="@+id/price_textView"
             android:layout_width="60dp"
             android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green1"
             android:gravity="center"
             android:lines="1"
+            android:padding="2dp"
             android:text="@string/text_cost"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/site_textView"
             app:layout_constraintStart_toEndOf="@+id/site_textView"
             app:layout_constraintTop_toTopOf="@+id/site_textView" />
@@ -222,7 +236,7 @@
             android:id="@+id/ps_textView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMaxTextSize="20dp"
             android:autoSizeTextType="uniform"
             android:background="@color/pinya_green1"
             android:gravity="center"
@@ -230,10 +244,11 @@
             android:minWidth="50dp"
             android:padding="2dp"
             android:text="@string/text_ps"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/address_textView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/itemDate_textView"
-            app:layout_constraintTop_toTopOf="@+id/itemDate_textView" />
+            app:layout_constraintStart_toEndOf="@+id/time_textView"
+            app:layout_constraintTop_toTopOf="@+id/time_textView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

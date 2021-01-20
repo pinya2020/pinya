@@ -3,13 +3,11 @@ package com.juan.pinya.view.main.dailyReport.carId
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,7 +56,7 @@ class CarDialogFragment : DialogFragment(), CarDialogClickListener {
         setUpCar()
         carId_dialog_Button.setOnClickListener {
             if (carId == null){
-                carId_dialog_textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.background_delete_button))
+                carId_dialog_textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.delete))
                 return@setOnClickListener
             }
             dismiss()

@@ -1,7 +1,12 @@
 package com.juan.pinya.view.login
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -32,9 +37,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!sharedPreferencesManager.isFirstLogin) {
-            alertDialog = showLoadingDialog()
-            loginViewModel.autoLogin()
+        if(isOnline(this)) {
+            if (!sharedPreferencesManager.isFirstLogin) {
+                alertDialog = showLoadingDialog()
+                loginViewModel.autoLogin()
+            }
+        }else{
+            Toast.makeText(this,getString(R.string.text_please_check_internet),Toast.LENGTH_SHORT).show()
         }
     }
 //enter登入
@@ -53,14 +62,18 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login() {
-        val id = id_editText.text.toString()
-        if (id.isEmpty()) {
-            showToast(getString(R.string.text_please_enter_id))
-            return
+        if (isOnline(this)) {
+            val id = id_editText.text.toString()
+            if (id.isEmpty()) {
+                showToast(getString(R.string.text_please_enter_id))
+                return
+            }
+            val password = password_editText.text.toString()
+            alertDialog = showLoadingDialog()
+            loginViewModel.doLoginAction(id, password, LoginType.Normal(false, false))
+        }else{
+            Toast.makeText(this,getString(R.string.text_please_check_internet),Toast.LENGTH_SHORT).show()
         }
-        val password = password_editText.text.toString()
-        alertDialog = showLoadingDialog()
-        loginViewModel.doLoginAction(id, password, LoginType.Normal(false))
     }
 
     private fun setObservers() {
@@ -74,4 +87,26 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
+}
+
+private fun isOnline(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (connectivityManager != null) {
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                return true
+            }
+        }
+    }
+    return false
 }

@@ -5,9 +5,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import androidx.annotation.IntegerRes
+import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.juan.pinya.R
@@ -27,7 +29,7 @@ import java.util.*
 
 class DailyReportEditFragment : BaseFragment() {
     private val TAG = "DRAdd4Fragment"
-    private lateinit var newDailyReport: DailyReport
+    private lateinit var dailyReport: DailyReport
     private val cal = Calendar.getInstance()
     private var nowYear = cal.get(Calendar.YEAR)
     private var nowMonth = cal.get(Calendar.MONTH)
@@ -36,22 +38,26 @@ class DailyReportEditFragment : BaseFragment() {
     private var nowMinute = cal.get(Calendar.MINUTE)
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
-    private val calendar = Calendar.Builder()
-        .set(Calendar.YEAR, nowYear)
-        .set(Calendar.MONTH, nowMonth)
-        .set(Calendar.DAY_OF_MONTH, nowDay)
-        .set(Calendar.HOUR, nowHour)
-        .set(Calendar.MINUTE, nowMinute)
-        .build()
-    private var date = Timestamp(calendar.time)
+//    private val calendar = Calendar.Builder()
+//        .set(Calendar.YEAR, nowYear)
+//        .set(Calendar.MONTH, nowMonth)
+//        .set(Calendar.DAY_OF_MONTH, nowDay)
+//        .set(Calendar.HOUR, nowHour)
+//        .set(Calendar.MINUTE, nowMinute)
+//        .build()
+    private var date = Timestamp(cal.time)
+    private val formatHour = SimpleDateFormat("HH", Locale.getDefault())
+    private val formatMinute = SimpleDateFormat("mm", Locale.getDefault())
     override var bottomNavigationViewVisibility = View.GONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         arguments?.apply {
-            newDailyReport = getParcelable(DAILY_REPORT_KEY) ?: return@apply
+            dailyReport = getParcelable(DAILY_REPORT_KEY) ?: return@apply
         }
+
+        cal.set(nowYear, nowMonth, nowDay, nowMinute, 0)
     }
 
     override fun onCreateView(
@@ -63,56 +69,78 @@ class DailyReportEditFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (newDailyReport.id != null) {
+        if (dailyReport.id != null) {
             add4_textView.text = getString(R.string.text_updata_dailyreport)
-        } else {
-            add4_textView.text = getString(R.string.text_add_dailyreport)
+            add4_ps_editText.setText(dailyReport.ps)
+            hour_editTextNumber.setText(formatHour.format(dailyReport.date.toDate()))
+            minute_editTextNumber.setText(formatMinute.format(dailyReport.date.toDate()))
+
         }
 
-        add4_carId_textView.text = newDailyReport.carId
+        if(dailyReport.meter != Int.MIN_VALUE){
+            add4_meter_editText.setText(dailyReport.meter.toString())
+        }
+        if (dailyReport.number != Int.MIN_VALUE){
+            add4_number_editText.setText(dailyReport.number.toString())
+        }
+
+        add4_meter_editText.addTextChangedListener(textWatcher)
+        add4_number_editText.addTextChangedListener(textWatcher)
+//        hour_editTextNumber.addTextChangedListener(textWatcher)
+//        minute_editTextNumber.addTextChangedListener(textWatcher)
+        //EditTextView actionDone + Multiline
+        add4_ps_editText.setHorizontallyScrolling(false)
+        add4_ps_editText.maxLines = Int.MAX_VALUE
+
         add4_carId_imageButton.setOnClickListener {
             add4_carId_textView.error = null
             showCarIdDialog(false)
         }
-        add4_company_textView.text = newDailyReport.company
-        add4_site_textView.text = newDailyReport.site
-        add4_address_textView.text = newDailyReport.address
-        add4_price_textView.text = newDailyReport.price.toString()
+
+        add4_carId_textView.text = dailyReport.carId
+        add4_company_textView.text = dailyReport.company
+        add4_site_textView.text = dailyReport.site
+        add4_address_textView.text = dailyReport.address
+        add4_price_textView.text = dailyReport.price.toString()
+
+        if (dailyReport.date != Timestamp(Date())) {
+            date = dailyReport.date
+            val formatYear = SimpleDateFormat("yyyy", Locale.getDefault())
+            val formatMount = SimpleDateFormat("MM", Locale.getDefault())
+            val formatDay = SimpleDateFormat("dd", Locale.getDefault())
+            nowYear = formatYear.format(date.toDate()).toInt()
+            nowMonth = formatMount.format(date.toDate()).toInt()-1
+            nowDay = formatDay.format(date.toDate()).toInt()
+        }
 
         val formatDate = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-        add4_date_textView.text = formatDate.format(newDailyReport.date.toDate())
-        val formatTime = SimpleDateFormat("HH:mm", Locale.getDefault())
-        add4_time_textView.text = formatTime.format(newDailyReport.date.toDate())
+        add4_date_textView.text = formatDate.format(dailyReport.date.toDate())
 
-        if (newDailyReport.meter != Int.MIN_VALUE) {
-            add4_meter_editText.setText(newDailyReport.meter.toString())
+        hour_editTextNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                hour_editTextNumber.setText("")
+            }
         }
-        if (newDailyReport.number != Int.MIN_VALUE) {
-            add4_number_editText.setText(newDailyReport.number.toString())
+
+        minute_editTextNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                minute_editTextNumber.setText("")
+            }
         }
-        //EditTextView actionDone + Multiline
-        add4_ps_editText.setHorizontallyScrolling(false)
-        add4_ps_editText.maxLines = Int.MAX_VALUE
-        add4_ps_editText.setText(newDailyReport.ps)
+
+        time_imageButton.setOnClickListener {
+            hour_editTextNumber.error = null
+            minute_editTextNumber.error = null
+            val hour = cal.get(Calendar.HOUR_OF_DAY)
+            val minute = cal.get(Calendar.MINUTE)
+            TimePickerDialog(requireContext(), { _, setHour, setMinute ->
+                hour_editTextNumber.setText(setHour.toString())
+                minute_editTextNumber.setText(setMinute.toString())
+            }, hour, minute, true).show()
+        }
 
         add4_company_textView.setOnClickListener {
-            val fragment = CompanyFragment.newInstance(newDailyReport.id)
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
-                addToBackStack(null)
-                commit()
-            }
-        }
-        add4_site_textView.setOnClickListener {
-            val fragment = SiteFragment.newInstance(newDailyReport)
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
-                addToBackStack(null)
-                commit()
-            }
-        }
-        add4_address_textView.setOnClickListener {
-            val fragment = AddressFragment.newInstance(newDailyReport)
+            val fragment = CompanyFragment.newInstance(dailyReport.id)
             parentFragmentManager.beginTransaction().apply {
                 replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
                 addToBackStack(null)
@@ -120,8 +148,22 @@ class DailyReportEditFragment : BaseFragment() {
             }
         }
 
-        if (newDailyReport.date != Timestamp(Date())) {
-            date = newDailyReport.date
+        add4_site_textView.setOnClickListener {
+            val fragment = SiteFragment.newInstance(dailyReport)
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+        add4_address_textView.setOnClickListener {
+            val fragment = AddressFragment.newInstance(dailyReport)
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.dailyReport_constraintLayout, fragment, fragment.tag)
+                addToBackStack(null)
+                commit()
+            }
         }
 
         data_imageButton.setOnClickListener {
@@ -135,78 +177,123 @@ class DailyReportEditFragment : BaseFragment() {
                     nowMonth = month
                     nowDay = day
                     val showDate = "$nowYear/${nowMonth + 1}/$nowDay"
-                    val calendar = Calendar.Builder()
-                        .set(Calendar.YEAR, nowYear)
-                        .set(Calendar.MONTH, nowMonth)
-                        .set(Calendar.DAY_OF_MONTH, nowDay)
-                        .set(Calendar.HOUR, nowHour)
-                        .set(Calendar.MINUTE, nowMinute)
-                        .build()
-                    date = Timestamp(calendar.time)
                     add4_date_textView.text = showDate
                 }, year, month, day).show()
             }
         }
 
-        time_imageButton.setOnClickListener {
-            val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val minute = cal.get(Calendar.MINUTE)
-            TimePickerDialog(requireContext(), { _, setHour, setMinute ->
-                nowHour = setHour
-                nowMinute = setMinute
-                val calendar = Calendar.Builder()
-                    .set(Calendar.YEAR, nowYear)
-                    .set(Calendar.MONTH, nowMonth)
-                    .set(Calendar.DAY_OF_MONTH, nowDay)
-                    .set(Calendar.HOUR, nowHour)
-                    .set(Calendar.MINUTE, nowMinute)
-                    .build()
-                date = Timestamp(calendar.time)
-                val showTime = "$nowHour:$nowMinute"
-                add4_time_textView.text = showTime
-            }, hour, minute, true).show()
-        }
-
         add4_finish_button.setOnClickListener {
             if (add4_carId_textView.text.isEmpty()) {
-                add4_carId_textView.error = "請選擇車號"
-                if (add4_meter_editText.text.isEmpty()) {
-                    add4_meter_editText.error = "請輸入米數"
-                    if (add4_number_editText.text.isEmpty()) {
-                        add4_number_editText.error = "請輸入車次"
+                add4_carId_textView.error = getString(R.string.text_please_select_car_id)
+                if (add4_meter_editText.text.isEmpty() || add4_meter_editText.text.toString()
+                        .toInt() == 0
+                ) {
+                    add4_meter_editText.error = getString(R.string.text_please_import_meter)
+                    if (add4_number_editText.text.isEmpty() || add4_number_editText.text.toString()
+                            .toInt() == 0
+                    ) {
+                        add4_number_editText.error =
+                            getString(R.string.text_please_import_car_number)
                     }
                 }
                 return@setOnClickListener
             }
-            val carId = add4_carId_textView.text.toString()
 
-            if (add4_meter_editText.text.isEmpty()) {
-                add4_meter_editText.error = "請輸入米數"
-                if (add4_number_editText.text.isEmpty()) {
-                    add4_number_editText.error = "請輸入車次"
+            if (add4_meter_editText.text.isEmpty() || add4_meter_editText.text.toString()
+                    .toInt() == 0
+            ) {
+                add4_meter_editText.error = getString(R.string.text_please_import_meter)
+                if (add4_number_editText.text.isEmpty() || add4_number_editText.text.toString()
+                        .toInt() == 0
+                ) {
+                    add4_number_editText.error = getString(R.string.text_please_import_car_number)
                 }
                 return@setOnClickListener
             }
-            val meter = add4_meter_editText.text.toString().toInt()
-            if (add4_number_editText.text.isEmpty()) {
-                add4_number_editText.error = "請輸入車次"
+
+            if (add4_number_editText.text.isEmpty() || add4_number_editText.text.toString()
+                    .toInt() == 0
+            ) {
+                add4_number_editText.error = getString(R.string.text_please_import_car_number)
                 return@setOnClickListener
             }
+
+            if (hour_editTextNumber.text.isEmpty()){
+                hour_editTextNumber.error = getString(R.string.text_please_import_correct_hour)
+                if (minute_editTextNumber.text.toString().isEmpty()){
+                    minute_editTextNumber.error = getString(R.string.text_please_import_correct_minute)
+                }
+                return@setOnClickListener
+            }
+
+            if (minute_editTextNumber.text.toString().isEmpty()){
+                minute_editTextNumber.error = getString(R.string.text_please_import_correct_minute)
+                return@setOnClickListener
+            }
+
+            nowHour = hour_editTextNumber.text.toString().toInt()
+            nowMinute = minute_editTextNumber.text.toString().toInt()
+            if (nowHour < 0 || nowHour > 23) {
+                hour_editTextNumber.error = getString(R.string.text_please_import_correct_hour)
+                if (nowMinute < 0 || nowMinute > 60) {
+                    minute_editTextNumber.error = getString(R.string.text_please_import_correct_minute)
+                }
+                return@setOnClickListener
+            }
+
+            if (nowMinute < 0 || nowMinute > 60) {
+                minute_editTextNumber.error = getString(R.string.text_please_import_correct_minute)
+                return@setOnClickListener
+            }
+
+            if(add4_site_textView.text.equals(getString(R.string.text_other)) && add4_ps_editText.text.isEmpty()){
+                add4_ps_editText.error = getString(R.string.text_please_import_ps)
+                return@setOnClickListener
+            }
+
+//            val calendar = Calendar.Builder()
+//                .set(Calendar.YEAR, nowYear)
+//                .set(Calendar.MONTH, nowMonth)
+//                .set(Calendar.DAY_OF_MONTH, nowDay)
+//                .set(Calendar.HOUR, nowHour)
+//                .set(Calendar.MINUTE, nowMinute)
+//                .build()
+
+            cal.set(nowYear,nowMonth,nowDay,nowHour,nowMinute,0)
+            date = Timestamp(cal.time)
+            val carId = add4_carId_textView.text.toString()
+            val meter = add4_meter_editText.text.toString().toInt()
             val number = add4_number_editText.text.toString().toInt()
             val ps = add4_ps_editText.text.toString()
-            val dailyReport = newDailyReport.copy(
+            val newDailyReport = dailyReport.copy(
                 carId = carId,
                 date = date,
                 meter = meter,
                 number = number,
                 ps = ps
             )
+
             add4_finish_button.isEnabled = false
-            if (newDailyReport.id == null) {
-                addDailyReport(dailyReport)
+            if (isOnline(requireContext())) {
+                if (dailyReport.id == null) {
+                    val ref = db
+                        .collection(Stuff.DIR_NAME)
+                        .document(newDailyReport.userId)
+                        .collection(DailyReport.DIR_NAME).document()
+                    val addDailyReport = newDailyReport.copy(id = ref.id)
+                    setDailyReport(addDailyReport)
+                    setAdminDailyReport(addDailyReport)
+                } else {
+                    setDailyReport(newDailyReport)
+                    setAdminDailyReport(newDailyReport)
+                }
             } else {
-                setDailyReport(dailyReport)
+                add4_finish_button.isEnabled = true
+                Toast.makeText(requireContext(),
+                    getString(R.string.text_please_check_internet),
+                    Toast.LENGTH_SHORT).show()
             }
+
         }
 
         add4_cancel_button.setOnClickListener {
@@ -214,25 +301,14 @@ class DailyReportEditFragment : BaseFragment() {
         }
     }
 
-    private fun addDailyReport(dailyReport: DailyReport) {
-        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
-            .collection(DailyReport.DIR_NAME).document()
-        val addDailyReport = dailyReport.copy(id = ref.id)
-        ref.set(addDailyReport)
-            .addOnSuccessListener {
-                setAdminDailyReport(addDailyReport)
-            }.addOnFailureListener { exception ->
-                Log.w(TAG, "Error addDailyReport", exception)
-            }
-    }
-
     private fun setDailyReport(dailyReport: DailyReport) {
-        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
+        db.collection(Stuff.DIR_NAME)
+            .document(dailyReport.userId)
             .collection(DailyReport.DIR_NAME)
             .document(dailyReport.id ?: return)
             .set(dailyReport)
             .addOnSuccessListener {
-                setAdminDailyReport(dailyReport)
+                Log.d(TAG, "DailyReport 新增成功")
             }.addOnFailureListener { exception ->
                 Log.w(TAG, "Error setDailyReport", exception)
             }
@@ -243,6 +319,7 @@ class DailyReportEditFragment : BaseFragment() {
             .document(dailyReport.id ?: return)
             .set(dailyReport)
             .addOnSuccessListener {
+                Log.d(TAG, "AdminDailyReport 新增成功")
                 parentFragmentManager.popBackStack(null, 1)
             }
             .addOnFailureListener { Log.w(TAG, "Error addDailyReport", it) }
@@ -258,6 +335,18 @@ class DailyReportEditFragment : BaseFragment() {
         if (resultCode == Activity.RESULT_OK) {
             val newCarId = data?.getStringExtra("carId")
             add4_carId_textView.text = newCarId
+        }
+    }
+
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+        override fun afterTextChanged(s: Editable?) {
+            if (s.toString().length > 1 && s.toString().startsWith("0")) {
+                s?.replace(0, 1, "")
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.juan.pinya.view.login
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,7 +32,7 @@ class LoginViewModel(
             doLoginAction(
                 sharedPreferencesManager.stuffId,
                 sharedPreferencesManager.password,
-                LoginType.AutoLogin(false)
+                LoginType.AutoLogin(false, true)
             )
         }
     }
@@ -39,14 +40,17 @@ class LoginViewModel(
     fun doLoginAction(id: String, password: String, loginType: LoginType) {
         viewModelScope.launch {
             stuffDao.getStuffById(id).onSuccess { stuff ->
-                if (stuff?.password == password) {
+
+                if (stuff?.password == password && stuff.work) {
                     sharedPreferencesManager.stuffId = stuff.id
                     sharedPreferencesManager.password = stuff.password
                     sharedPreferencesManager.name = stuff.name
                     sharedPreferencesManager.isFirstLogin = false
                 }
+                loginType.work = stuff?.work ?: true
                 loginType.isLoginSuccess = stuff?.password == password
                 mIsLoginSuccess.value = loginType
+
             }.onFailure {
                 mError.setValue(it)
             }

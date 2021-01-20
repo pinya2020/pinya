@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -31,17 +33,18 @@ import java.util.*
 
 
 class ExpenditureFragment : BaseFragment() {
+    private val TAG = "ExpenditureFragment"
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
     private val calendar = Calendar.getInstance().setMountStarTime()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val adapter: ExpenditureAdapter by lazy {
         ExpenditureAdapter(getOptions(calendar)) { expenditure ->
-            val fragment = ExpenditureEditFragment.newInstance(expenditure)
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.expenditure_constraintLayout, fragment, fragment.tag)
-                addToBackStack(null)
-                commit()
-            }
+//            val fragment = ExpenditureEditFragment.newInstance(expenditure)
+//            parentFragmentManager.beginTransaction().apply {
+//                replace(R.id.expenditure_constraintLayout, fragment, fragment.tag)
+//                addToBackStack(null)
+//                commit()
+//            }
         }
     }
 
@@ -102,53 +105,60 @@ class ExpenditureFragment : BaseFragment() {
     private fun setUpRv() {
         expenditure_recylerView.layoutManager = LinearLayoutManager(this.context)
         expenditure_recylerView.adapter = adapter
-        val swipe = object : ExpenditureSwipeHelper(requireContext(),
-            expenditure_recylerView!!,
-            300) {
-            override fun instantiateMyButton(
-                expenditure: Expenditure,
-                buffer: MutableList<DeleteButton>
-            ) {
-
-                buffer.add(DeleteButton(requireContext(),
-                    getString(R.string.text_delete),
-                    100,
-                    0,
-                    ContextCompat.getColor(requireContext(), R.color.background_delete_button)) {
-                    val dialog = showDeleteDialog()
-                    db.collection(Stuff.DIR_NAME)
-                        .document(sharedPreferencesManager.stuffId)
-                        .collection(Expenditure.DIR_NAME)
-                        .document(expenditure.id ?: return@DeleteButton)
-                        .delete()
-                        .addOnSuccessListener {
-                            deleteAdminExpenditure(expenditure, dialog)
-                        }
-                        .addOnFailureListener {
-                            dialog.dismiss()
-                            Toast.makeText(context,
-                                R.string.text_delete_fail,
-                                Toast.LENGTH_SHORT).show()
-                        }
-                })
-            }
-        }
+//        object : ExpenditureSwipeHelper(requireContext(),
+//            expenditure_recylerView!!,
+//            300) {
+//            override fun instantiateMyButton(
+//                expenditure: Expenditure,
+//                buffer: MutableList<DeleteButton>
+//            ) {
+//
+//                buffer.add(DeleteButton(requireContext(),
+//                    getString(R.string.text_delete),
+//                    100,
+//                    0,
+//                    ContextCompat.getColor(requireContext(), R.color.background_delete_button)) {
+//                    val dialog = showDeleteDialog()
+//                    Handler().postDelayed({ dialog.dismiss() }, 300)
+//                    if (isOnline(requireContext())) {
+//                        deleteExpenditure(expenditure)
+//                        deleteAdminExpenditure(expenditure)
+//                    } else {
+//                        Toast.makeText(requireContext(),
+//                            getString(R.string.text_please_check_internet),
+//                            Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            }
+//        }
     }
 
-    private fun deleteAdminExpenditure(expenditure: Expenditure, dialog: Dialog) {
+    private fun deleteExpenditure(expenditure: Expenditure) {
+        db.collection(Stuff.DIR_NAME)
+            .document(expenditure.userId)
+            .collection(Expenditure.DIR_NAME)
+            .document(expenditure.id ?: return)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "Expenditure 刪除成功")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "Expenditure 刪除失敗")
+            }
+    }
+
+    private fun deleteAdminExpenditure(expenditure: Expenditure) {
         db.collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .delete()
             .addOnSuccessListener {
-                dialog.dismiss()
                 Toast.makeText(context,
                     R.string.text_delete_success,
                     Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                dialog.dismiss()
                 Toast.makeText(context,
-                    R.string.text_delete_admin_fail,
+                    R.string.text_delete_fail,
                     Toast.LENGTH_SHORT).show()
             }
     }
@@ -173,15 +183,15 @@ class ExpenditureFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.add_menu, menu)
+//        inflater.inflate(R.menu.add_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.add_action -> {
-                showFragment(ExpenditureEditFragment.newInstance())
-            }
-        }
+//        when (item.itemId) {
+//            R.id.add_action -> {
+//                showFragment(ExpenditureEditFragment.newInstance())
+//            }
+//        }
         return super.onOptionsItemSelected(item)
     }
 

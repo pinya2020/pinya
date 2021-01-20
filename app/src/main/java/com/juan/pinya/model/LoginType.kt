@@ -6,15 +6,25 @@ import com.juan.pinya.R
 import com.juan.pinya.extention.showAlertDialog
 import com.juan.pinya.view.main.MainActivity
 
-sealed class LoginType(var isLoginSuccess: Boolean) {
-    class Normal(isLoginSuccess: Boolean): LoginType(isLoginSuccess) {
+sealed class LoginType(var isLoginSuccess: Boolean, var work: Boolean) {
+    class Normal(isLoginSuccess: Boolean, work:Boolean): LoginType(isLoginSuccess, work) {
         override fun action(activity: Activity, loadingDialog: Dialog?) {
-            if (isLoginSuccess) {
-                gotoMainActivity(activity, loadingDialog)
-            } else {
+            if (work) {
+                if (isLoginSuccess) {
+                    gotoMainActivity(activity, loadingDialog)
+                } else {
+                    loadingDialog?.dismiss()
+                    activity.showAlertDialog(
+                        activity.getString(R.string.text_wrong_password),
+                        activity.getString(R.string.text_enter)
+                    ) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                }
+            }else{
                 loadingDialog?.dismiss()
                 activity.showAlertDialog(
-                    activity.getString(R.string.text_wrong_password),
+                    activity.getString(R.string.text_wrong_work),
                     activity.getString(R.string.text_enter)
                 ) { dialog, _ ->
                     dialog.cancel()
@@ -23,12 +33,22 @@ sealed class LoginType(var isLoginSuccess: Boolean) {
         }
     }
 
-    class AutoLogin(isLoginSuccess: Boolean): LoginType(isLoginSuccess) {
+    class AutoLogin(isLoginSuccess: Boolean, work:Boolean): LoginType(isLoginSuccess, work) {
         override fun action(activity: Activity, loadingDialog: Dialog?) {
-            if (isLoginSuccess) {
-                gotoMainActivity(activity, loadingDialog)
-            } else {
+            if (work) {
+                if (isLoginSuccess) {
+                    gotoMainActivity(activity, loadingDialog)
+                } else {
+                    loadingDialog?.dismiss()
+                }
+            }else{
                 loadingDialog?.dismiss()
+                activity.showAlertDialog(
+                    activity.getString(R.string.text_wrong_work),
+                    activity.getString(R.string.text_enter)
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
             }
         }
     }

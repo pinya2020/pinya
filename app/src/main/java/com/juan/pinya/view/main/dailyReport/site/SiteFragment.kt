@@ -50,7 +50,7 @@ class SiteFragment : BaseFragment(), SiteClickListener {
                 showFragment(newDailyReport)
             }else{
                 add2_textView.setTextColor(ContextCompat.getColor(requireContext(),
-                    R.color.background_delete_button))
+                    R.color.delete))
             }
 
         }
@@ -62,7 +62,7 @@ class SiteFragment : BaseFragment(), SiteClickListener {
             db.collection(Company.DIR_NAME).document(companyId)
                 .collection(Site.DIR_NAME)
 
-        val query: Query = dailyReportRef
+        val query: Query = dailyReportRef.orderBy("date", Query.Direction.DESCENDING)
         val options = FirestoreRecyclerOptions.Builder<Site>()
             .setQuery(query, Site::class.java)
             .build()

@@ -1,8 +1,10 @@
 package com.juan.pinya.model
 
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Car(
@@ -12,28 +14,35 @@ data class Car(
     @SerializedName(CAR_ID_KEY)
     val carId: String = "",
 
-    @SerializedName("personInCharge")
-    val personInCharge: String = "",
+//    @SerializedName("personInCharge")
+//    val personInCharge: String = "",
 
     @SerializedName("loanMonths")
-    val loanMonths: Int = Int.MIN_VALUE,
+    val loan: Boolean = false,
 
-    @SerializedName("loan")
-    val loan: Int = Int.MIN_VALUE,
+    @SerializedName("loanAmount")
+    val loanAmount: Int = ZERO_KEY,
+
+    @SerializedName("loanMonths")
+    val loanMonths: Int = ZERO_KEY,
 
     @SerializedName("loanPayment")
-    val loanPayment: Int = Int.MIN_VALUE,
+    val loanPayment: Int = ZERO_KEY,
 
     @SerializedName("paymentDate")
-    val paymentDate: Int = Int.MIN_VALUE,
+    val paymentDate: Int = ZERO_KEY,
 
     @SerializedName("violation")
-    var violation: Int = Int.MIN_VALUE
+    var violation: Int = ZERO_KEY,
+
+    @SerializedName("updataDate")
+    var updataDate: Timestamp = Timestamp(Date())
 
 ) : Parcelable {
 
     companion object {
         const val DIR_NAME = "車輛"
         const val CAR_ID_KEY = "carId"
+        const val ZERO_KEY = 0
     }
 }

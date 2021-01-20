@@ -8,14 +8,14 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 
-class PinyaApplication : Application() {
+class PinyaStuffApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
             if (BuildConfig.DEBUG) {
                 androidLogger()
             }
-            androidContext(this@PinyaApplication)
+            androidContext(this@PinyaStuffApplication)
             loadKoinModules(
                 listOf(
                     appModule,

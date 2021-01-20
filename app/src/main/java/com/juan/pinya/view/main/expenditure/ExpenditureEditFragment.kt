@@ -5,8 +5,11 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.juan.pinya.R
@@ -15,7 +18,6 @@ import com.juan.pinya.model.Expenditure
 import com.juan.pinya.model.Stuff
 import com.juan.pinya.module.SharedPreferencesManager
 import com.juan.pinya.module.dailyReport.BaseFragment
-import kotlinx.android.synthetic.main.fragment_daily_report_add4.*
 import kotlinx.android.synthetic.main.fragment_expenditure_edit.*
 import kotlinx.android.synthetic.main.fragment_expenditure_edit.add4_textView
 import org.koin.android.ext.android.inject
@@ -27,7 +29,7 @@ class ExpenditureEditFragment : BaseFragment() {
     override var bottomNavigationViewVisibility = View.GONE
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val sharedPreferencesManager by inject<SharedPreferencesManager>(SHARED_PREFERENCES_NAME)
-    private lateinit var newExpenditure: Expenditure
+    private lateinit var expenditure: Expenditure
     private val cal = Calendar.getInstance()
     private var nowYear = cal.get(Calendar.YEAR)
     private var nowMonth = cal.get(Calendar.MONTH)
@@ -48,7 +50,7 @@ class ExpenditureEditFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         arguments?.apply {
-            newExpenditure = getParcelable(EXPENDITURE_KEY) ?: return@apply
+            expenditure = getParcelable(EXPENDITURE_KEY) ?: return@apply
         }
 
     }
@@ -64,35 +66,25 @@ class ExpenditureEditFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (newExpenditure.id != null) {
-            add4_textView.text = getString(R.string.text_updata_dailyreport)
-        } else {
-            add4_textView.text = getString(R.string.text_add_dailyreport)
-        }
-        if (newExpenditure.type.isNotEmpty()) {
-            type_textView.text = newExpenditure.type
-        } else {
-            showTypeDialog()
-        }
-
-        if (newExpenditure.carId.isEmpty()) {
-            carId_textView.text = sharedPreferencesManager.carId
-        } else {
-            carId_textView.text = newExpenditure.carId
-        }
-
-        if (newExpenditure.date != Timestamp(Date())) {
-            date = newExpenditure.date
-        }
-        date_textView.text = simpleDateFormat.format(date.toDate())
-
-        if (newExpenditure.price != Int.MIN_VALUE) {
-            price_editText.setText(newExpenditure.price.toString())
-        }
-
         ps_editText.setHorizontallyScrolling(false)
         ps_editText.maxLines = Int.MAX_VALUE
-        ps_editText.setText(newExpenditure.ps)
+        price_editText.addTextChangedListener(textWatcher)
+
+        if (expenditure.id != null) {
+            add4_textView.text = getString(R.string.text_updata_expenditure)
+            type_textView.text = expenditure.type
+            carId_textView.text = expenditure.carId
+            date = expenditure.date
+            price_editText.setText(expenditure.price.toString())
+            ps_editText.setText(expenditure.ps)
+
+        } else{
+            showTypeDialog()
+            carId_textView.text = sharedPreferencesManager.carId
+
+        }
+
+        date_textView.text = simpleDateFormat.format(date.toDate())
 
         type_imageButton.setOnClickListener { showTypeDialog() }
 
@@ -101,8 +93,8 @@ class ExpenditureEditFragment : BaseFragment() {
         date_imageButton.setOnClickListener { showDatePickerDialog() }
 
         finish_button.setOnClickListener {
-            if (price_editText.text.isEmpty()) {
-                price_editText.error = "請輸入價格"
+            if (price_editText.text.isEmpty() || price_editText.text.toString().toInt() == 0) {
+                price_editText.error = getString(R.string.text_please_import_price)
                 return@setOnClickListener
             }
 
@@ -110,7 +102,7 @@ class ExpenditureEditFragment : BaseFragment() {
             val carId = carId_textView.text.toString()
             val price = price_editText.text.toString().toInt()
             val ps = ps_editText.text.trim().toString()
-            val expenditure = newExpenditure.copy(
+            val newExpenditure = expenditure.copy(
                 userId = sharedPreferencesManager.stuffId,
                 userName = sharedPreferencesManager.name,
                 type = type,
@@ -119,10 +111,24 @@ class ExpenditureEditFragment : BaseFragment() {
                 price = price,
                 ps = ps
             )
-            if (newExpenditure.id == null) {
-                addExpenditure(expenditure)
+
+            finish_button.isEnabled = false
+            if (isOnline(requireContext())) {
+                if (this.expenditure.id == null) {
+                    val ref = db.collection(Stuff.DIR_NAME)
+                        .document(newExpenditure.userId)
+                        .collection(Expenditure.DIR_NAME).document()
+                    val addExpenditure = newExpenditure.copy(id = ref.id)
+                    setExpenditure(addExpenditure)
+                    setAdminExpenditure(addExpenditure)
+                } else {
+                    setExpenditure(newExpenditure)
+                    setAdminExpenditure(newExpenditure)
+                }
             } else {
-                setExpenditure(expenditure)
+                finish_button.isEnabled = true
+                Toast.makeText(requireContext(), getString(R.string.text_please_check_internet),
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -131,35 +137,24 @@ class ExpenditureEditFragment : BaseFragment() {
         }
     }
 
-    private fun addExpenditure(expenditure: Expenditure) {
-        val ref = db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
-            .collection(Expenditure.DIR_NAME).document()
-        val addExpenditure = expenditure.copy(id = ref.id)
-        ref.set(addExpenditure)
-            .addOnSuccessListener {
-                setAdminExpenditure(addExpenditure)
-            }.addOnFailureListener { exception ->
-                Log.w(TAG, "Error addExpenditure", exception)
-            }
-    }
-
     private fun setExpenditure(expenditure: Expenditure) {
-        db.collection(Stuff.DIR_NAME).document(sharedPreferencesManager.stuffId)
+        db.collection(Stuff.DIR_NAME).document(expenditure.userId)
             .collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .set(expenditure)
             .addOnSuccessListener {
-                setAdminExpenditure(expenditure)
+                Log.d(TAG, "Expenditure 新增成功")
             }.addOnFailureListener { exception ->
                 Log.w(TAG, "Error setExpenditure", exception)
             }
     }
 
-    private fun setAdminExpenditure(expenditure: Expenditure){
+    private fun setAdminExpenditure(expenditure: Expenditure) {
         db.collection(Expenditure.DIR_NAME)
             .document(expenditure.id ?: return)
             .set(expenditure)
             .addOnSuccessListener {
+                Log.d(TAG, "AdminExpenditure 新增成功")
                 parentFragmentManager.popBackStack(null, 1)
             }.addOnFailureListener { exception ->
                 Log.w(TAG, "Error setExpenditure", exception)
@@ -216,6 +211,15 @@ class ExpenditureEditFragment : BaseFragment() {
         if (resultCode == Activity.RESULT_OK) {
             val carId = data?.getStringExtra("carId")
             carId_textView.text = carId
+        }
+    }
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable?) {
+            if (s.toString().length > 1 && s.toString().startsWith("0")) {
+                s?.replace(0, 1, "")
+            }
         }
     }
 
